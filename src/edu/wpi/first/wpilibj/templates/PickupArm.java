@@ -30,10 +30,6 @@ public class PickupArm {
     double currentPosition;
     
     Team3373 team;
-    
-    public PickupArm(Team3373 t){
-       team = t;
-    }
 
     public void rotateEnabled(){
         rotateFlag = true;

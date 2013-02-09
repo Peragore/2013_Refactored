@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.8.3
-Created-By: 1.7.0-b147 (Oracle Corporation)
+Created-By: 1.7.0_09-b05 (Oracle Corporation)
 MIDlet-Name: Robot_Test
 MIDlet-Version: 1.0.0
 MIDlet-Vendor: FIRST

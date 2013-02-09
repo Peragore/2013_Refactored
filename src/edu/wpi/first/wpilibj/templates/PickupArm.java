@@ -9,14 +9,15 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PickupArm {
     
     
-    Relay grabSpike = new Relay(1);
-    Relay vacuumSpike = new Relay(2);
+    Relay grabSpike = new Relay(2);
+    Relay vacuumSpike = new Relay(1);
     Talon rotateTalon = new Talon(1, 3);
-    AnalogChannel pot1 = new AnalogChannel(7);
+    AnalogChannel pot1 = new Anal ogChannel(7);
     DigitalInput armLimit = new DigitalInput(3); //returns true if clicked
     
     int grabStatus = 0;
@@ -39,46 +40,6 @@ public class PickupArm {
     }
     public void rotateDisabled(){
         rotateFlag = false;
-    }
-    public void rotate (double targetPosition){
-        /*
-        currentPosition =  pot1.getVoltage(); //manual control
-        //if ( shootA &&  flagA && currentPosition <= 3.334){ //a control (moving positive)
-             targetPosition = (currentPosition + .25);
-             flagA = false;
-        } else if ( shootB &&  flagB && currentPosition >= 1.5){ //b control (moving negative)
-             targetPosition = (currentPosition - .25);
-             flagB = false;
-        } else if (currentPosition <= 3.334 && currentPosition >= 1.5 ) { //manual control using Lstick X axis (positive and negative)                      
-             StageOneTalon.set( shootLX);
-        }
-         smartDashboard.putNumber("Target Position: ",  targetPosition);
-         smartDashboard.putNumber("Rotate Status: ", rotateStatus);
-         smartDashboard.putNumber("Current Position: ", currentPosition);
-        //
-        * */
-          switch(rotateStatus){
-                case 0:
-                   if(rotateFlag){
-                      rotateStatus = 1;
-                   }
-                    break;
-              case 1:
-                  if( targetPosition > currentPosition && currentPosition <= 3.334){
-                      rotateTalon.set(0.75);
-                  } else if (targetPosition < currentPosition && currentPosition >= 1.5){
-                      rotateTalon.set(-0.75);
-                 } 
-                 if (currentPosition > ( targetPosition - 0.05) && currentPosition < ( targetPosition + 0.05)){
-                      rotateStatus = 2;
-                    }
-                  break;
-               case 2:
-                    rotateTalon.set(0);
-                    rotateStatus = 0;
-                    rotateDisabled();
-                  break;
-        }
     }
     public void armUp(){//TODO: make thread and sleep for 2 seconds while running
             final Thread thread = new Thread(new Runnable() {
@@ -163,5 +124,22 @@ public class PickupArm {
             }
         
          LCD.updateLCD();
+         
 
-*/ }
+*/ 
+        public void rotate(double target){ //moves arm to target, or doesn't move if arm is close.
+          currentPosition = pot1.getVoltage();
+          if (Math.abs(target - currentPosition) <= .1){
+              rotateTalon.set(0);
+          } else {
+            if(target > currentPosition && currentPosition <= 2.8){
+               rotateTalon.set(-.3);
+            } 
+            if (target < currentPosition && currentPosition >= 2.0){
+               rotateTalon.set(.3);
+            }
+            SmartDashboard.putNumber("CurrentPosition: ", currentPosition);
+            SmartDashboard.putNumber("Target Difference: ", Math.abs(target-currentPosition));
+          }
+        }
+}

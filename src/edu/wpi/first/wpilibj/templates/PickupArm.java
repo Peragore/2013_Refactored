@@ -17,7 +17,7 @@ public class PickupArm {
     Relay grabSpike = new Relay(2);
     Relay vacuumSpike = new Relay(1);
     Talon rotateTalon = new Talon(1, 3);
-    AnalogChannel pot1 = new Anal ogChannel(7);
+    AnalogChannel pot1 = new AnalogChannel(7);
     DigitalInput armLimit = new DigitalInput(3); //returns true if clicked
     
     int grabStatus = 0;

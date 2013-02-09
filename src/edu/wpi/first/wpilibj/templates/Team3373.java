@@ -99,6 +99,13 @@ public class Team3373 extends SimpleRobot{
     /**
      * This function is called once each time the robot enters operator control.
      */
+    public void disabled(){
+        while (isDisabled()){
+            manualToggle = false;
+            armTestFlag = false;
+            targetRotatePosition = arm.pot1.getVoltage();    
+        }
+    }
     public void operatorControl() {
         robotTimer.start();
         while (isOperatorControl() & isDisabled()){ 
@@ -214,7 +221,7 @@ public class Team3373 extends SimpleRobot{
             if (shooterController.isBPushed()) arm.armDown();
             //Arm.grabFrisbee(shooterController.isStartPushed());
 
-
+            shooterController.clearButtons();
             LiveWindow.run();
         }
         SmartDashboard.putNumber("Target: ", targetRotatePosition);

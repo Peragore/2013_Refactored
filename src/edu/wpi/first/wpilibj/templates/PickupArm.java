@@ -154,10 +154,10 @@ public class PickupArm {
               rotateTalon.set(0);
           } else {
             if(target > currentPosition && currentPosition <= 2.8){
-               rotateTalon.set(-.3);
+               rotateTalon.set(-1);
             } 
             if (target < currentPosition && currentPosition >= 2.0){
-               rotateTalon.set(.3);
+               rotateTalon.set(1);
             }
             SmartDashboard.putNumber("CurrentPosition: ", currentPosition);
             SmartDashboard.putNumber("Target Difference: ", Math.abs(target-currentPosition));

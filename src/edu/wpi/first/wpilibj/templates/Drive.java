@@ -13,7 +13,6 @@ public class Drive {
     
     public void drive(double driveLX, double driveLY, double driveRX){ 
         
-    
     mechanum.mecanumDrive_Cartesian(driveLX * speed, driveLY * speed, driveRX * speed, 0); //Sets the motor speeds
     
     }
@@ -28,11 +27,4 @@ public class Drive {
             speed = 0.75; //In default mode
         }
     }
-    
-    public void drivePrint(DriverStationLCD LCD){
-        
-        LCD.println(DriverStationLCD.Line.kUser1, 1, Double.toString(speed));
-        
-    }
-    
 }

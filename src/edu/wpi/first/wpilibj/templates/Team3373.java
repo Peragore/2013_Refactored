@@ -85,6 +85,7 @@ public class Team3373 extends SimpleRobot{
    int RX = 4;
    int RY = 5;
    int DP = 6;
+   double rotateTest = 2.7;
    
    //public Team3373(){
       // camera.robotInit();
@@ -103,7 +104,9 @@ public class Team3373 extends SimpleRobot{
         while (isDisabled()){
             manualToggle = false;
             armTestFlag = false;
-            targetRotatePosition = arm.pot1.getVoltage();    
+            arm.demoOnFlag = false;
+            targetRotatePosition = arm.pot1.getVoltage(); 
+            arm.demoStatus = 0;
         }
     }
     public void operatorControl() {
@@ -111,10 +114,12 @@ public class Team3373 extends SimpleRobot{
         while (isOperatorControl() & isDisabled()){ 
             manualToggle = false;
             armTestFlag = false;
-            targetRotatePosition = arm.pot1.getVoltage();
+            arm.demoOnFlag = false;
+            targetRotatePosition = arm.pot1.getVoltage(); 
+            arm.demoStatus = 0;
         }
    while (isOperatorControl() & isEnabled()){
-   objTableLookUp.test();
+   //objTableLookUp.test();
    /****************
    **Shooter Code***
    ****************/
@@ -122,13 +127,13 @@ public class Team3373 extends SimpleRobot{
        shooterController.clearButtons();
        
        LCD.println(Line.kUser2, 1, "running");
-       if(shooterController.isStartPushed()){
+       /*if(shooterController.isStartPushed()){
            LCD.println(Line.kUser5, 1, "Inside");//TODO
            //camera.imageAnalysis();
            System.out.println("Inside");
            //objShooter.start();
            //arm.armUp();
-       }
+       }*/
        /**********************
         * Shooter Algorithms *
         **********************/
@@ -172,9 +177,28 @@ public class Team3373 extends SimpleRobot{
         /******************
          * Demo/Test Code *
          ******************/
-       if  (!armTestFlag) {
-       arm.rotateTalon.set(shooterController.getRawAxis(LX));
+       /*if (shooterController.isStartPushed()){
+         arm.demoStatus = 0;
+         arm.demoOnFlag = true;
+         arm.armDemo();
+       }*/
+       /* if (shooterController.isStartPushed()){
+           arm.rotate(2.7);
        }
+       */
+       if (!armTestFlag){
+        if (shooterController.isStartPushed()){
+            arm.demoStatus = 0;
+            arm.demoOnFlag = true;
+            arm.armDemo();
+        }
+       }
+       //arm.rotate(rotateTest);
+       
+
+       //if  (!armTestFlag) {
+       //arm.rotateTalon.set(shooterController.getRawAxis(LX));
+       //}
         if (shooterController.isAHeld() && shooterController.isXHeld() && shooterController.isYHeld() && !armTestFlag){ //allows the test mode for the arm assembly to start
             armTestFlag = true;
         } else if (shooterController.isAHeld() && shooterController.isXHeld() && shooterController.isYHeld() && armTestFlag){ //turns the test mode for arm off
@@ -224,7 +248,7 @@ public class Team3373 extends SimpleRobot{
             shooterController.clearButtons();
             LiveWindow.run();
         }
-        SmartDashboard.putNumber("Target: ", targetRotatePosition);
+        //SmartDashboard.putNumber("Target: ", targetRotatePosition);
         //SmartDashboard.putNumber("manualStatus: ", manualStatus);
         SmartDashboard.putBoolean("ManualToggle: ", manualToggle);
         SmartDashboard.putBoolean ("Test Status: ", armTestFlag);

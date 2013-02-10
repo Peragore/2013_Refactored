@@ -40,7 +40,7 @@ public class Team3373 extends SimpleRobot{
    //Deadband objDeadband = new Deadband();
    Timer robotTimer = new Timer();
    PickupArm arm = new PickupArm();
-   //Camera camera = new Camera();
+   Camera camera = new Camera();
 
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
@@ -87,9 +87,9 @@ public class Team3373 extends SimpleRobot{
    int DP = 6;
    double rotateTest = 2.7;
    
-   //public Team3373(){
-      // camera.robotInit();
-    //}
+   public Team3373(){
+      camera.robotInit(LCD);
+    }
     
     public void autonomous() {
         for (int i = 0; i < 4; i++)  {

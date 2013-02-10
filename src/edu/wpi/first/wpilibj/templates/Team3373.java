@@ -34,13 +34,14 @@ public class Team3373 extends SimpleRobot{
    
    DriverStationLCD LCD = DriverStationLCD.getInstance();
    //SmartDashboard smartDashboard;
-   SuperJoystick driveStick = new SuperJoystick(1); 
+   SuperJoystick driveStick = new SuperJoystick(1);
    SuperJoystick shooterController = new SuperJoystick(2);
    Shooter objShooter = new Shooter();
    //Deadband objDeadband = new Deadband();
    Timer robotTimer = new Timer();
    PickupArm arm = new PickupArm();
-   // camera = new Camera();
+   Drive objDrive = new Drive();
+   Camera camera = new Camera();
 
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
@@ -137,6 +138,13 @@ public class Team3373 extends SimpleRobot{
            //objShooter.start();
            //arm.armUp();
        }*/
+        /**********************
+        * Drive Code *
+        **********************/
+       
+       objDrive.setSpeed(driveStick.isRBHeld(), driveStick.isLBHeld()); //Sets the speed variable (Sniper vs. Turbo vs. Default)
+       objDrive.drive(driveStick.getRawAxis(LX),driveStick.getRawAxis(LY),driveStick.getRawAxis(RX)); //Calls the Drive function
+       
        /**********************
         * Shooter Algorithms *
         **********************/

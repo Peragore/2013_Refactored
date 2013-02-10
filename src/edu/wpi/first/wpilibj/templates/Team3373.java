@@ -39,7 +39,7 @@ public class Team3373 extends SimpleRobot{
    Shooter objShooter = new Shooter();
    //Deadband objDeadband = new Deadband();
    Timer robotTimer = new Timer();
-   PickupArm arm = new PickupArm(this);
+   PickupArm arm = new PickupArm();
    //Camera camera = new Camera();
 
    double rotateLimitMaximum = 4.8;//are these used?

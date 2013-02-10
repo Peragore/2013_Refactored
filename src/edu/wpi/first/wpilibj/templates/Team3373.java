@@ -154,6 +154,9 @@ public class Team3373 extends SimpleRobot{
            arm.armDown();
            //objShooter.stop();
        }
+       if (shooterController.isStartPushed()){
+           arm.armUp();
+       }
        if(shooterController.isLStickPushed() && !armTestFlag){
            LCD.println(Line.kUser5, 1, "Inside");
            //camera.imageAnalysis();
@@ -193,6 +196,9 @@ public class Team3373 extends SimpleRobot{
             arm.armDemo();
         }
        }
+       SmartDashboard.putBoolean("ArmUp Bool:", arm.downFlag);
+       SmartDashboard.putBoolean("ArmDown Bool: ", arm.upFlag);
+       SmartDashboard.putNumber("CurrentPosition :", arm.currentPosition);
        //arm.rotate(rotateTest);
        
 

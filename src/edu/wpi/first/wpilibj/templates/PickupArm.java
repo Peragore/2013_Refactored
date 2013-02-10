@@ -155,8 +155,8 @@ public class PickupArm {
 
         public void armDemo(){ 
          if (demoOnFlag){    
- 
-             switch (demoStatus) {
+             armDown();
+             /*switch (demoStatus) {
                   case 0:
                       rotate(2.7);
                       if (Math.abs(2.7-currentPosition) <= .05){
@@ -186,7 +186,7 @@ public class PickupArm {
                       vacuumFlag = false;
                       demoOnFlag = false;
                       break;
-              }
+              }*/
               
          }
          }            

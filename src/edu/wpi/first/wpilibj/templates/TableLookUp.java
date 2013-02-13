@@ -26,7 +26,7 @@ public class TableLookUp {
     hash.put(new Double(4.0), new Double(4.0));
     hash.put(new Double(5.0), new Double(5.0));
     //double hashDouble = hash.getValue(1.0);
-    System.out.println(hash.toString());
+    //System.out.println(hash.toString());
     }
 
     public double lookUpAngle(double currentDistance){

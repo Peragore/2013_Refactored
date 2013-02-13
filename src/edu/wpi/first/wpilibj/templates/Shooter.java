@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.Talon;
  */
 public class Shooter {
        //Relay shootSpike = new Relay(2);
-       Talon stageOneTalon = new Talon(1, 1); //Creates instance of StageOne PWM
-       Talon stageTwoTalon = new Talon(1, 2); //Creates instance of StageTwo PWM
+       Talon stageOneTalon = new Talon(5); //Creates instance of StageOne PWM
+       Talon stageTwoTalon = new Talon(6); //Creates instance of StageTwo PWM
        AnalogChannel elevatorPot = new AnalogChannel(6);
        
        double percentageScaler = 0.5;

@@ -1,5 +1,6 @@
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
@@ -31,7 +32,9 @@ import edu.wpi.first.wpilibj.image.NIVision.Rect;
  */
 
 public class Camera {
-
+    
+    DriverStationLCD LCD;
+    ColorImage image = null; //moved up here
     final int XMAXSIZE = 24;
     final int XMINSIZE = 24;
     final int YMAXSIZE = 24;
@@ -49,8 +52,13 @@ public class Camera {
     final int Y_EDGE_LIMIT = 60;
     
     final int X_IMAGE_RES = 320;          //X Image resolution in pixels, should be 160, 320 or 640
-    final double VIEW_ANGLE = 43.5;       //Axis 206 camera
+    final int Y_IMAGE_RES = 240;
+//    final double VIEW_ANGLE = 43.5;       //Axis 206 camera
 //    final double VIEW_ANGLE = 48;       //Axis M1011 camera
+    double HEIGHT_VIEW_ANGLE = 51; //Axis M1014 camera
+    double WIDTH_VIEW_ANGLE = 80;
+    double middle_distance = 0.0;
+    double high_distance = 0.0;
     
     AxisCamera camera = AxisCamera.getInstance();          // the axis camera object (connected to the switch)
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
@@ -63,7 +71,8 @@ public class Camera {
         double yEdge;
     }
     
-    public void robotInit() {
+    public void robotInit(DriverStationLCD lcd){
+        LCD = lcd;
         //camera = AxisCamera.getInstance();  // get an instance of the camera
         cc = new CriteriaCollection();      // create the criteria for the particle filter
         cc.addCriteria(MeasurementType.IMAQ_MT_AREA, 500, 65535, false);
@@ -77,20 +86,20 @@ public class Camera {
                  * level directory in the flash memory on the cRIO. The file name in this case is "testImage.jpg"
                  * 
                  */
-                ColorImage image = null;
                 try {
                    image = camera.getImage();     // comment if using stored images
                 } catch (AxisCameraException ace) {
-                  
                 }
                 //ColorImage image;                           // next 2 lines read image from flash on cRIO
-                //image = new RGBImage("/testImage.jpg");		// get the sample image from the cRIO flash
+                //image = new RGBImage("/new/threshold.bmp");		// get the sample image from the cRIO flash
                 BinaryImage thresholdImage = image.thresholdHSV(60, 100, 90, 255, 20, 255);   // keep only red objects
-                thresholdImage.write("/new/threshold.bmp");
+                //thresholdImage.write("/new/threshold.bmp");
                 BinaryImage convexHullImage = thresholdImage.convexHull(false);          // fill in occluded rectangles
-                convexHullImage.write("/new/convexHull.bmp");
+                //convexHullImage.write("/new/convexHull.bmp");
                 BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // filter out small particles
-                filteredImage.write("/new/filteredImage.bmp");
+                //filteredImage.write("/new/filteredImage.bmp");
+                convexHullImage.free(); //moved up here
+
                 
                 //iterate through each particle and score to see if it is a target
                 Camera.Scores scores[] = new Camera.Scores[filteredImage.getNumberParticles()];
@@ -107,16 +116,19 @@ public class Camera {
                     if(scoreCompare(scores[i], false))
                     {
                         System.out.println("particle: " + i + "is a High Goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
-			System.out.println("Distance: " + computeDistance(thresholdImage, report, i, false));
+                        high_distance=computeDistance(thresholdImage, report, i, true);
+			System.out.println("Distance: " + high_distance);
+                        
                     } else if (scoreCompare(scores[i], true)) {
 			System.out.println("particle: " + i + "is a Middle Goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
-			System.out.println("Distance: " + computeDistance(thresholdImage, report, i, true));
+                        middle_distance=computeDistance(thresholdImage, report, i, false);
+                        LCD.println(DriverStationLCD.Line.kUser5, 1, "Mid Dist=" + middle_distance);
                     } else {
-                        System.out.println("particle: " + i + "is not a goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
+                        //System.out.println("particle: " + i + "is not a goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
                     }
-			System.out.println("rect: " + scores[i].rectangularity + "ARinner: " + scores[i].aspectRatioInner);
-			System.out.println("ARouter: " + scores[i].aspectRatioOuter + "xEdge: " + scores[i].xEdge + "yEdge: " + scores[i].yEdge);	
-                    }
+		    System.out.println("rect: " + scores[i].rectangularity + "ARinner: " + scores[i].aspectRatioInner);
+		    System.out.println("ARouter: " + scores[i].aspectRatioOuter + "xEdge: " + scores[i].xEdge + "yEdge: " + scores[i].yEdge);	
+                }
 
                 /**
                  * all images in Java must be freed after they are used since they are allocated out
@@ -124,7 +136,6 @@ public class Camera {
                  * each pass of this loop.
                  */
                 filteredImage.free();
-                convexHullImage.free();
                 thresholdImage.free();
                 image.free();
                 
@@ -155,17 +166,41 @@ public class Camera {
      * @param outer True if the particle should be treated as an outer target, false to treat it as a center target
      * @return The estimated distance to the target in Inches.
      */
-    double computeDistance (BinaryImage image, ParticleAnalysisReport report, int particleNumber, boolean outer) throws NIVisionException {
-            double rectShort, height;
-            int targetHeight;
-
-            rectShort = NIVision.MeasureParticle(image.image, particleNumber, false, MeasurementType.IMAQ_MT_EQUIVALENT_RECT_SHORT_SIDE);
-            //using the smaller of the estimated rectangle short side and the bounding rectangle height results in better performance
-            //on skewed rectangles
-            height = Math.min(report.boundingRectHeight, rectShort);
-            targetHeight = outer ? 29 : 21;
-
-            return X_IMAGE_RES * targetHeight / (height * 12 * 2 * Math.tan(VIEW_ANGLE*Math.PI/(180*2)));
+    double computeDistance (BinaryImage image, ParticleAnalysisReport report, int particleNumber, boolean upper) throws NIVisionException {
+            double pixelheight, pixelwidth;
+            int targetHeight,targetWidth;
+            if (upper) {
+                targetHeight = 20; //12+4+4 is hole plus tape
+            } else {
+                targetHeight = 29; //21+4+4
+            }
+            targetWidth = 62; //54+4+4
+            
+            pixelheight = report.boundingRectHeight; //NIVision.MeasureParticle(image.image, particleNumber, false, MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT);
+            pixelwidth = report.boundingRectWidth; //NIVision.MeasureParticle(image.image, particleNumber, false, MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH);
+            double height_angle = (pixelheight/Y_IMAGE_RES)*HEIGHT_VIEW_ANGLE;
+            double width_angle = (pixelwidth/X_IMAGE_RES)*WIDTH_VIEW_ANGLE;
+            //System.out.println("PH="+pixelheight+",HA="+height_angle);
+            //System.out.println("PW="+pixelwidth+",WA="+width_angle);
+            double rha=Math.toRadians(height_angle);
+            double rwa=Math.toRadians(width_angle);
+            double disth = targetHeight/rha;
+            double distw = targetWidth/rwa;
+            System.out.println("DISTH="+disth+",DISTHW="+distw);
+            
+            //double tan = Math.tan(Math.toRadians(HEIGHT_VIEW_ANGLE/2.0));
+            //System.out.println("Tan of angle="+tan);
+            //double calcheight = targetHeight * Y_IMAGE_RES / pixelheight;
+            //double ch = targetHeight*pixelheight/Y_IMAGE_RES;
+            //System.out.println("CH="+calcheight);
+            //double dist = calcheight/tan;
+            //System.out.println("Dist="+dist);
+            //double cangle = (pixelheight/Y_IMAGE_RES) * 42;
+            //System.out.println("Cangle="+cangle);
+            //double d = targetHeight/Math.tan(Math.toRadians(cangle));
+            //System.out.println("D="+d);
+            
+            return distw/12.0;
     }
     
     /**
@@ -291,6 +326,10 @@ public class Camera {
         }
         total = 100*total/(rowAverages.length);
         return total;
+    }
+    
+    public void setLCD(DriverStationLCD lcd){
+        LCD = lcd;
     }
     
 }

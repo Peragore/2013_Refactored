@@ -196,8 +196,7 @@ public class Team3373 extends SimpleRobot{
             arm.armDemo();
         }
        }
-       SmartDashboard.putBoolean("ArmUp Bool:", arm.downFlag);
-       SmartDashboard.putBoolean("ArmDown Bool: ", arm.upFlag);
+       SmartDashboard.putBoolean("ArmUp Bool:", arm.upDownFlag);
        SmartDashboard.putNumber("CurrentPosition :", arm.currentPosition);
        //arm.rotate(rotateTest);
        

@@ -157,11 +157,11 @@ public class Team3373 extends SimpleRobot{
        if (shooterController.isStartPushed()){
            arm.armUp();
        }
-       if(shooterController.isLStickPushed() && !armTestFlag){
+       /*if(shooterController.isLStickPushed() && !armTestFlag){
            LCD.println(Line.kUser5, 1, "Inside");
-           //camera.imageAnalysis();
+           //camera.imageAnalysis();    TODO: Is this needed?
            System.out.println("Inside");
-       }
+       }*/
        //arm.rotate(targetRotatePosition);
        objShooter.printLCD(LCD);
        //Arm.rotate(targetPosition);

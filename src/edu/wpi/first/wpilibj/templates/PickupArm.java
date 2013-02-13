@@ -148,7 +148,9 @@ public class PickupArm {
                return false;
             }
         }
-
+        public void demo(){
+            rotate(2.7);
+        }
         public void armDemo(){ 
          if (demoOnFlag){    
              armDown();

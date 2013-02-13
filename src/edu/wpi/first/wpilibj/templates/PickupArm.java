@@ -17,7 +17,7 @@ public class PickupArm {
     
     Relay grabSpike = new Relay(2);
     Relay vacuumSpike = new Relay(1);
-    Talon rotateTalon = new Talon(1, 3);
+    Talon rotateTalon = new Talon(9);
     AnalogChannel pot1 = new AnalogChannel(7);
     DigitalInput armLimit = new DigitalInput(3); //returns true if clicked
     Timer robotTimer = new Timer();
@@ -114,14 +114,14 @@ public class PickupArm {
         grabString = Integer.toString(grabStatus);
         
             //System.out.println("in Vacuum Creation Mode");
-            System.out.println("Grab status :" + grabStatus);
+            /*System.out.println("Grab status :" + grabStatus);
             System.out.println("VacuumFlag: " + vacuumFlag);
             System.out.println("vacuumBoolean: " + vacuumBoolean);
             System.out.println("current - last time: " + (robotTimer.get() - currentTime));
             System.out.println("armLimit: " + armLimit.get());
             System.out.println("RobotTimer: " + robotTimer.get());
             System.out.println("UpDownFlag: " + upDownFlag);
-            System.out.println("UpDown Time Comparison: " + (robotTimer.get() - lastTime));
+            System.out.println("UpDown Time Comparison: " + (robotTimer.get() - lastTime));*/
             if (vacuumBoolean) {
             switch(grabStatus){
 

@@ -26,7 +26,7 @@ public class Team3373 extends SimpleRobot{
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
-   Servo frontCameraServo = new Servo(6);//camera class?
+   Servo frontCameraServo = new Servo(10);//camera class?
    
    
    
@@ -41,7 +41,7 @@ public class Team3373 extends SimpleRobot{
    Timer robotTimer = new Timer();
    PickupArm arm = new PickupArm();
    Drive objDrive = new Drive();
-   Camera camera = new Camera();
+   //Camera camera = new Camera();
 
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
@@ -86,6 +86,10 @@ public class Team3373 extends SimpleRobot{
    int RY = 5;
    int DP = 6;
    double rotateTest = 2.7;
+   double frontBackDrive;
+   double leftRightDrive;
+   double rotateDrive;
+   
    
    //public Team3373(){
      // camera.robotInit(LCD);
@@ -108,6 +112,7 @@ public class Team3373 extends SimpleRobot{
             arm.targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
             arm.robotTimer.start();
+            objDrive.driverPerspective = 0;
         }
     }
     public void operatorControl() {
@@ -119,9 +124,10 @@ public class Team3373 extends SimpleRobot{
             arm.targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
             arm.robotTimer.start();
+            objDrive.driverPerspective = 0;
         }
    while (isOperatorControl() & isEnabled()){
-   
+   if (!armTestFlag){
        //objTableLookUp.test();
    /****************
    **Shooter Code***
@@ -129,6 +135,7 @@ public class Team3373 extends SimpleRobot{
    //Resets the internal toggle flags when a previously pushed button has been released
        shooterController.clearButtons();
        arm.currentPosition = arm.pot1.getVoltage();
+       objDrive.perspectiveControl(driveStick.isAPushed(), driveStick.isBPushed(), driveStick.isXPushed(), driveStick.isYPushed());
        
        LCD.println(Line.kUser2, 1, "running");
        /*if(shooterController.isStartPushed()){
@@ -141,37 +148,57 @@ public class Team3373 extends SimpleRobot{
         /**********************
         * Drive Code *
         **********************/
-       
+
+       switch (objDrive.driverPerspective){
+           case 0: //forward
+               leftRightDrive = driveStick.getRawAxis(LX);
+               frontBackDrive = driveStick.getRawAxis(LY);
+               break;
+           case 1: //left?
+               leftRightDrive = driveStick.getRawAxis(LX);
+               frontBackDrive = -driveStick.getRawAxis(LY);
+               break;
+           case 2: //reverse?
+               leftRightDrive = -driveStick.getRawAxis(LY);
+               frontBackDrive = -driveStick.getRawAxis(LX);
+               break;
+           case 3: //right?
+               leftRightDrive = -driveStick.getRawAxis(LY);
+               frontBackDrive = driveStick.getRawAxis(LX);
+               break;
+       }
        objDrive.setSpeed(driveStick.isRBHeld(), driveStick.isLBHeld()); //Sets the speed variable (Sniper vs. Turbo vs. Default)
-       objDrive.drive(driveStick.getRawAxis(LX),driveStick.getRawAxis(LY),driveStick.getRawAxis(RX)); //Calls the Drive function
+       
+       objDrive.drive(leftRightDrive,frontBackDrive,rotateDrive); //Calls the Drive function
+       
        
        /**********************
         * Shooter Algorithms *
         **********************/
        
-       if(shooterController.isAPushed() && !armTestFlag){
+       if(shooterController.isAPushed()){
             objShooter.increaseSpeed();
        }
-       if(shooterController.isBPushed() && !armTestFlag){
+       if(shooterController.isBPushed()){
            objShooter.decreaseSpeed();
-       }
-       if(shooterController.isXPushed() && !armTestFlag){
+       }        
+       if(shooterController.isXPushed()){
            objShooter.increasePercentage();
        }
-       if(shooterController.isYPushed() && !armTestFlag){
+       if(shooterController.isYPushed()){
            objShooter.decreasePercentage();
        }
-       if(shooterController.isBackPushed() && !armTestFlag){
+       if(shooterController.isBackPushed()){
            arm.armUp();
            //objShooter.stop();
        }
-       if (shooterController.isRBPushed() && !armTestFlag){
+       if (shooterController.isRBPushed()){
            arm.armDown();
        }
        /*if (shooterController.isStartPushed()){
            arm.armUp();
        }*/
-       if(shooterController.isLStickPushed() && !armTestFlag){
+       if(shooterController.isLStickPushed()){
            LCD.println(Line.kUser5, 1, "Inside");
            //camera.imageAnalysis();
            System.out.println("Inside");
@@ -195,17 +222,18 @@ public class Team3373 extends SimpleRobot{
          * Demo/Test Code *
          ******************/
 
-       if (!armTestFlag){
+       
         if (shooterController.isStartPushed() && !arm.demoOnFlag){
             arm.demoStatus = 0;
             arm.demoOnFlag = true;
         } else if (shooterController.isStartPushed() && arm.demoOnFlag){
             arm.demoOnFlag = false;
         }
-       }
        arm.rotate(arm.targetRotatePosition);
        arm.armDemo();
        arm.createVacuum(arm.vacuumTrigger);
+       }
+
        /*SmartDashboard.putBoolean("ArmUp Bool:", arm.downFlag);
        SmartDashboard.putBoolean("ArmDown Bool: ", arm.upFlag);
        SmartDashboard.putNumber("CurrentPosition :", arm.currentPosition);
@@ -284,6 +312,17 @@ public class Team3373 extends SimpleRobot{
         //String potString = Double.toString(pot1.getVoltage());
         //LCD.println(Line.kUser2, 1, potString);
         LCD.updateLCD();
+        System.out.println("Arm Test Flag: " + armTestFlag);
+        System.out.println("Perspective: " + objDrive.driverPerspective);
+        System.out.println("Driver A Button: " + driveStick.isAHeld());
+        SmartDashboard.putNumber("Perspective: ", objDrive.driverPerspective);
+        SmartDashboard.putBoolean("isAPushed", driveStick.isAHeld());
+        SmartDashboard.putBoolean("isBPushed", driveStick.isBHeld());
+        SmartDashboard.putBoolean("isXPushed", driveStick.isXHeld());
+        SmartDashboard.putBoolean("isYPushed", driveStick.isYHeld());
+        SmartDashboard.putNumber("LX", driveStick.getRawAxis(LX));
+        SmartDashboard.putNumber("LY", driveStick.getRawAxis(LY));
+        SmartDashboard.putNumber("RX", driveStick.getRawAxis(RX));
     
         
         }

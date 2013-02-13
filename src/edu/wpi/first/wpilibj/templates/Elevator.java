@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.Talon;
  * @author Jamie
  */
 public class Elevator {
-    Talon elevatorTalon2 = new Talon(1, 4);
-    Talon elevatorTalon1 = new Talon(1, 5);
+    Talon elevatorTalon2 = new Talon(8);
+    Talon elevatorTalon1 = new Talon(7);
     AnalogChannel angleMeter = new AnalogChannel(5);
     
     double minLimit = 0;

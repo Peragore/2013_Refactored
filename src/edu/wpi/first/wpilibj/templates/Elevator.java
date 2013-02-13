@@ -25,13 +25,11 @@ public class Elevator {
     double currentAngle; //= angleMeter.getVoltage();
     
     public void raise(){
-        elevatorTalon1.set(0.1);
-        elevatorTalon2.set(0.1);
+        elevatorTalons.set(0.1);
     }
     
     public void lower(){
-        elevatorTalon1.set(-0.1);
-        elevatorTalon2.set(-0.1);
+        elevatorTalons.set(-0.1);
     }
     public void off(){
         elevatorTalon1.set(0);

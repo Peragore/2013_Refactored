@@ -26,6 +26,7 @@ public class Team3373 extends SimpleRobot{
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
+
    Servo frontCameraServo = new Servo(10);//camera class?
    
    
@@ -325,6 +326,7 @@ public class Team3373 extends SimpleRobot{
         SmartDashboard.putNumber("RX", driveStick.getRawAxis(RX));
     
         
+
         }
     }
 }

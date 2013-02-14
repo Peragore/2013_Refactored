@@ -93,4 +93,17 @@ public class Shooter {
         });
             thread.start();
     }
+    public void loadFrisbee(){
+        final Thread thread = new Thread(new Runnable() {
+        public void run(){
+            shootSpike.set(Relay.Value.kReverse);
+               try{
+               Thread.sleep(500);
+               }
+               catch(InterruptedException e){}
+            shootSpike.set(Relay.Value.kOff);   
+            } 
+        });
+            thread.start();
+    }
 }

@@ -5,6 +5,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.Relay;
@@ -14,16 +15,17 @@ import edu.wpi.first.wpilibj.Talon;
  * @author RoboHawks
  */
 public class Shooter {
-       //Relay shootSpike = new Relay(2);
-       Talon stageOneTalon = new Talon(5); //Creates instance of StageOne PWM
-       Talon stageTwoTalon = new Talon(6); //Creates instance of StageTwo PWM
-       AnalogChannel elevatorPot = new AnalogChannel(6);
+        Relay shootSpike = new Relay(2);
+        Talon stageOneTalon = new Talon(5); //Creates instance of StageOne PWM
+        Talon stageTwoTalon = new Talon(6); //Creates instance of StageTwo PWM
+        AnalogChannel elevatorPot = new AnalogChannel(6);
+        DigitalInput shootLimit = new DigitalInput(7);
        
-       double percentageScaler = 0.5;
-       double stageTwoVoltageOut =  0.0;
-       double stageOneVoltageOut =  0.0;
+        double percentageScaler = 0.5;
+        double stageTwoVoltageOut =  0.0;
+        double stageOneVoltageOut =  0.0;
        
-       int elevatorStatus = 0;
+        int elevatorStatus = 0;
        
     public void start(){
         percentageScaler = 0.5;
@@ -65,8 +67,8 @@ public class Shooter {
         percentageScaler = 0.5;
         stageTwoVoltageOut = stageOneVoltageOut * percentageScaler;
         
-       stageOneTalon.set(stageOneVoltageOut);
-       stageTwoTalon.set(stageTwoVoltageOut);
+        stageOneTalon.set(stageOneVoltageOut);
+        stageTwoTalon.set(stageTwoVoltageOut);
     }
     public void printLCD(DriverStationLCD LCD){
         double Scaler = 5936; //converts voltage to RPM for display purposes only
@@ -81,32 +83,14 @@ public class Shooter {
         LCD.println(Line.kUser2, 1, "RPM2: " + (speedTwo * Scaler));
         LCD.updateLCD();
     }
-     public void elevator(double target){
-        if(0.2 < target && target < 4.8){//if the target anlge/voltage is not within safe limits do not execute code
-            switch (elevatorStatus){
-                case 0: //at required spot
-                    //shootSpike.set(Relay.Value.kOff);
-                    if (target > elevatorPot.getVoltage()  && (Math.abs(target - elevatorPot.getVoltage()) <= .05)){
-                        elevatorStatus = 1;
-                    } else if ((target < elevatorPot.getVoltage()) && (Math.abs(target - elevatorPot.getVoltage()) <= .05)){
-                        elevatorStatus = 2;
-                    } else {
-                        elevatorStatus = 0;
-                    }
-                    break;
-                case 1: //moving up
-                    //shootSpike.set(Relay.Value.kForward);
-                    if (Math.abs(target - elevatorPot.getVoltage()) <= .05){
-                        elevatorStatus = 0;
-                    }                    
-                    break;
-                case 2: //moving down
-                    //shootSpike.set(Relay.Value.kReverse);
-                    if (Math.abs(target - elevatorPot.getVoltage()) <= .05){
-                        elevatorStatus = 0;
-                    }
-                    break;
-                }
-        } 
+    public void shoot(){
+        final Thread thread = new Thread(new Runnable() {
+        public void run(){
+            while(!shootLimit.get()){
+                shootSpike.set(Relay.Value.kForward);
+            }   
+            } 
+        });
+            thread.start();
     }
 }

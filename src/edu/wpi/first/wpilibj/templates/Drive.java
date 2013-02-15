@@ -10,7 +10,7 @@ public class Drive {
     
     RobotDrive mechanum = new RobotDrive(1,2,3,4);
     double speed = 0.75; //Default Speed
-    int driverPerspective = 0;
+    //int driverPerspective = 0;
     
     public void drive(double driveLX, double driveLY, double driveRX){ 
          
@@ -28,7 +28,7 @@ public class Drive {
             speed = 0.75; //In default mode
         }
     }
-    public void perspectiveControl(boolean a, boolean b, boolean x, boolean y){
+   /* public void perspectiveControl(boolean a, boolean b, boolean x, boolean y){
        if (y){
            driverPerspective = 0;
        } if (a){
@@ -38,6 +38,6 @@ public class Drive {
        } if (b){
            driverPerspective = 3;
        }
-    }
+    }*/
 
 }

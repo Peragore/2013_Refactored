@@ -126,6 +126,10 @@ public class Team3373 extends SimpleRobot{
    //Resets the internal toggle flags when a previously pushed button has been released
        shooterController.clearButtons();
        
+       if(driveStick.isStartPushed()){
+           objShooter.shoot();
+       }
+       
        LCD.println(Line.kUser2, 1, "running");
        /*if(shooterController.isStartPushed()){
            LCD.println(Line.kUser5, 1, "Inside");//TODO

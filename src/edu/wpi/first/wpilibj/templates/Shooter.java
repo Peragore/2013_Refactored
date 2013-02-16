@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj.Talon;
  */
 public class Shooter {
         Relay shootSpike = new Relay(5);
-        Talon stageOneTalon = new Talon(5); //Shooter Talons, spin the wheels
-        Talon stageTwoTalon = new Talon(6); //Shooter Talons, spin the wheels
+        Talon stageOneTalon = new Talon(6); //Shooter Talons, spin the wheels
+        Talon stageTwoTalon = new Talon(5); //Shooter Talons, spin the wheels
         DigitalInput shootLimit = new DigitalInput(8);
        
         double percentageScaler = 0.5;

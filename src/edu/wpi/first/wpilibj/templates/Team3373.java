@@ -8,10 +8,9 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.templates.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.RobotDrive;
 //import edu.wpi.first.wpilibj.SimpleRobot;
 //import edu.wpi.first.wpilibj.templates.Shooter;
@@ -80,6 +79,7 @@ public class Team3373 extends SimpleRobot{
    boolean manualToggle;
    double manualStatus;
    boolean armTestFlag;
+   boolean canShoot;
    int LX = 1;
    int LY = 2;
    int Triggers = 3;
@@ -108,6 +108,7 @@ public class Team3373 extends SimpleRobot{
             arm.demoOnFlag = false;
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
+            canShoot = false;
         }
     }
     public void operatorControl() {
@@ -118,6 +119,7 @@ public class Team3373 extends SimpleRobot{
             arm.demoOnFlag = false;
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
+            canShoot = false;
         }
    while (isOperatorControl() & isEnabled()){
    if (!armTestFlag){
@@ -150,12 +152,19 @@ public class Team3373 extends SimpleRobot{
        /**********************
         * Shooter Algorithms *
         **********************/
-       if(shooterController.isLBPushed()){
+       if(driveStick.isLBHeld()){
            elevator.lower();
-       } else if (shooterController.isRBPushed()){
+       } else if (driveStick.isRBHeld()){
            elevator.raise();
-       } else elevator.off();
-       
+       } else {
+           elevator.off();
+       }
+       if (driveStick.isXPushed() && !driveStick.isYPushed()){
+           elevator.pwmModifier -= .05;
+       } else if (driveStick.isYPushed() && !driveStick.isXPushed()) {
+           elevator.pwmModifier += .05;
+       }
+       LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);
        if(shooterController.isAPushed()){
             objShooter.increaseSpeed();
        }
@@ -168,13 +177,16 @@ public class Team3373 extends SimpleRobot{
        if(shooterController.isYPushed()){
            objShooter.decreasePercentage();
        }
-       /*if(shooterController.isBackPushed()){
-           arm.armDown();
+       
+       if(shooterController.isBackPushed()){
+           objShooter.stop();
+           canShoot = false;
            //objShooter.stop();
        }
        if (shooterController.isStartPushed()){
-           arm.armUp();
-       }*/
+           objShooter.start();
+           canShoot = true;
+       }
        /*if(shooterController.isLStickPushed() && !armTestFlag){
            LCD.println(Line.kUser5, 1, "Inside");
            //camera.imageAnalysis();    TODO: Is this needed?

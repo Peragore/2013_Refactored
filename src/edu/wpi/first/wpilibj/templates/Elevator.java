@@ -22,11 +22,12 @@ public class Elevator {
     AnalogChannel angleMeter = new AnalogChannel(1);
     
     double minLimit = 2.45;
-    double maxLimit = 3;
+    double maxLimit = 3.0;
     double basePWM = .7;
     double pwmModifier = 0.85;
     double elevatorTarget;
-    double currentAngle; //= angleMeter.getVoltage();
+    double currentAngle = angleMeter.getVoltage();
+    double elevationTarget = angleMeter.getVoltage();;
     
     public void raise(){
         elevatorTalon1.set(basePWM);
@@ -42,25 +43,24 @@ public class Elevator {
         elevatorTalon2.set(0);
     }
     
-    public void goToAngle(double elevationTarget){
+    public void goToAngle(){
         //at the moment elevatorTarget is a voltage, 
         //TODO: make some sort of conversion from voltage to angle
-            currentAngle = angleMeter.getVoltage();
-            if (Math.abs(elevationTarget - currentAngle) <= .15){//TODO: check angle
-              off();
-            } else if (elevationTarget > currentAngle && elevationTarget < maxLimit){
-                raise();
-            } else if (elevationTarget < currentAngle && elevationTarget > minLimit){
-                lower();
-            }
-             
+        currentAngle = angleMeter.getVoltage(); 
+        if (Math.abs(elevationTarget - currentAngle) <= .15){//TODO: check angle
+          off();
+        } else if (elevationTarget > currentAngle && elevationTarget < maxLimit){
+          raise();
+        } else if (elevationTarget < currentAngle && elevationTarget > minLimit){
+          lower();
+        } 
         
     }
-    public void automaticElevatorTarget(boolean addTarget, boolean decreaseTarget){
+    /*public void automaticElevatorTarget(boolean addTarget, boolean decreaseTarget){
         if (addTarget  && elevatorTarget <= 4.7){
             elevatorTarget += .1;
         } if (decreaseTarget && elevatorTarget >= 1.3){
             elevatorTarget += -.1;
         }
-    }
+    }*/
 }

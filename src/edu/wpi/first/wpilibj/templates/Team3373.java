@@ -100,7 +100,7 @@ public class Team3373 extends SimpleRobot{
         if (isAutonomous() && isEnabled()){
                     if (leftRightSwitch.get()) //TODO: Finish
                     while (goToFlag){
-                        elevator.goToAngle(4);
+                        elevator.goToAngle();
                         if (Math.abs(4-elevator.currentAngle) <= .1) {
                             goToFlag = false;
                         }
@@ -159,7 +159,7 @@ public class Team3373 extends SimpleRobot{
             arm.demoOnFlag = false;
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
-            elevator.elevatorTarget = elevator.angleMeter.getVoltage();
+            elevator.elevationTarget = elevator.angleMeter.getVoltage();
         }
    while (isOperatorControl() & isEnabled()){
    if (!armTestFlag){
@@ -233,34 +233,42 @@ public class Team3373 extends SimpleRobot{
        //try {Thread.sleep(1000);} catch(Exception e){}
        /*****************
         * Elevator Code *
-        *****************/
-      /* if(driveStick.isLBHeld()){
-           elevator.lower();
-       } else if (driveStick.isRBHeld()){
-           elevator.raise();
-       } else {
-           elevator.off();
-       }
-       if (driveStick.isXPushed() && !driveStick.isYPushed()){
-           elevator.pwmModifier -= .05;
-       } else if (driveStick.isYPushed() && !driveStick.isXPushed()) {
-           elevator.pwmModifier += .05;
-       }
+ 
+       
        LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);*/
        //elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isRBPushed());
-       LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevatorTarget);
+       LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevationTarget);
        LCD.println(Line.kUser2, 1, "Elevation (Volt): " + elevator.angleMeter.getVoltage());
-       LCD.println(Line.kUser3, 1, "shootLimit: " + objShooter.shootLimit.get());
-       LCD.println(Line.kUser4, 1, "Switch1: " + frontBackSwitch.get());
-       LCD.println(Line.kUser5, 1, "Switch2: " + leftRightSwitch.get());
-       //elevator.goToAngle(elevator.elevatorTarget);
+       LCD.println(Line.kUser3, 1, "Current Angle:" + elevator.currentAngle);
+       //LCD.println(Line.kUser3, 1, "shootLimit: " + objShooter.shootLimit.get());
+       //LCD.println(Line.kUser4, 1, "Switch1: " + frontBackSwitch.get());
+       //LCD.println(Line.kUser5, 1, "Switch2: " + leftRightSwitch.get());
+       
+       /**************************
+       * Manual Elevator Control *
+       **************************/
+       /*
        if (shooterController.isRBHeld()){
            elevator.raise();
        } else if (shooterController.isLBHeld()){
            elevator.lower();
        } else {
            elevator.off();
+       }*/
+       
+       if(driveStick.isAPushed()){
+           elevator.elevationTarget = 2.5;
        }
+       if(driveStick.isBPushed()){
+           elevator.elevationTarget = 2.65;
+       }
+       if(driveStick.isXPushed()){
+           elevator.elevationTarget = 2.75;
+       }      
+       if(driveStick.isYPushed()){
+           elevator.elevationTarget = 2.95;
+       }
+       elevator.goToAngle();
        /*if (shooterController.isRBPushed(){
         *   elevator.elevatorTarget = 2.9;
         * } else if (shooterController.isLBPushed()){
@@ -272,7 +280,7 @@ public class Team3373 extends SimpleRobot{
         /**************
          * Drive Code *
          **************/
-         drive.setSpeed(driveStick.isAHeld(), driveStick.isBHeld());
+         drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld());
          drive.drive(driveStick.getRawAxis(RX), driveStick.getRawAxis(LX), driveStick.getRawAxis(LY));
         /******************
          * Demo/Test Code *

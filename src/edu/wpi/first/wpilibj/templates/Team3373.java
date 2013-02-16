@@ -177,6 +177,8 @@ public class Team3373 extends SimpleRobot{
        if(driveStick.isBackPushed()){
            objShooter.loadFrisbee();
        }
+       
+       cameraControl.move(shooterController.getRawAxis(LY));
 
        //LCD.println(Line.kUser2, 1, "running");
        

@@ -41,6 +41,7 @@ public class Team3373 extends SimpleRobot{
    PickupArm arm = new PickupArm();
    Elevator elevator = new Elevator();
    //Camera camera = new Camera();
+   CameraControl cameraControl = new CameraControl();
 
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
@@ -140,6 +141,8 @@ public class Team3373 extends SimpleRobot{
        if(driveStick.isBackPushed()){
            objShooter.loadFrisbee();
        }
+       
+       cameraControl.move(shooterController.getRawAxis(LY));
 
        //LCD.println(Line.kUser2, 1, "running");
        

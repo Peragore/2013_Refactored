@@ -25,6 +25,7 @@ public class Elevator {
     double maxLimit = 5;
     double basePWM = .6;
     double pwmModifier = 0.85;
+    double elevatorTarget;
     double currentAngle; //= angleMeter.getVoltage();
     
     public void raise(){

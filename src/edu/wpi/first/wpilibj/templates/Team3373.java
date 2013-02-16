@@ -43,6 +43,7 @@ public class Team3373 extends SimpleRobot{
    //Camera camera = new Camera();
    DigitalInput frontBackSwitch = new DigitalInput(12);
    DigitalInput leftRightSwitch = new DigitalInput(13);
+   CameraControl cameraControl = new CameraControl();
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
    Drive drive = new Drive();

@@ -26,7 +26,7 @@ public class Team3373 extends SimpleRobot{
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
-   Servo frontCameraServo = new Servo(6);//camera class?
+   //Servo frontCameraServo = new Servo(6);//camera class?
    
    
    
@@ -40,11 +40,12 @@ public class Team3373 extends SimpleRobot{
    //Deadband objDeadband = new Deadband();
    Timer robotTimer = new Timer();
    PickupArm arm = new PickupArm();
+   Elevator elevator = new Elevator();
    //Camera camera = new Camera();
 
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
-   //drive Drive = new drive(this);
+   Drive drive = new Drive();
 
    boolean test;
    boolean solenidFlag=false;
@@ -119,18 +120,26 @@ public class Team3373 extends SimpleRobot{
             arm.demoStatus = 0;
         }
    while (isOperatorControl() & isEnabled()){
+   if (!armTestFlag){
    //objTableLookUp.test();
    /****************
    **Shooter Code***
    ****************/
    //Resets the internal toggle flags when a previously pushed button has been released
+       driveStick.clearButtons();
        shooterController.clearButtons();
        
        if(driveStick.isStartPushed()){
            objShooter.shoot();
        }
+       if(driveStick.isBackPushed()){
+           objShooter.loadFrisbee();
+       }
+
+       //LCD.println(Line.kUser2, 1, "running");
        
-       LCD.println(Line.kUser2, 1, "running");
+        //test = objShooter.shootLimit.get();
+        //System.out.println(test);
        /*if(shooterController.isStartPushed()){
            LCD.println(Line.kUser5, 1, "Inside");//TODO
            //camera.imageAnalysis();
@@ -141,26 +150,31 @@ public class Team3373 extends SimpleRobot{
        /**********************
         * Shooter Algorithms *
         **********************/
+       if(shooterController.isLBPushed()){
+           elevator.lower();
+       } else if (shooterController.isRBPushed()){
+           elevator.raise();
+       } else elevator.off();
        
-       if(shooterController.isAPushed() && !armTestFlag){
+       if(shooterController.isAPushed()){
             objShooter.increaseSpeed();
        }
-       if(shooterController.isBPushed() && !armTestFlag){
+       if(shooterController.isBPushed()){
            objShooter.decreaseSpeed();
        }
-       if(shooterController.isXPushed() && !armTestFlag){
+       if(shooterController.isXPushed()){
            objShooter.increasePercentage();
        }
-       if(shooterController.isYPushed() && !armTestFlag){
+       if(shooterController.isYPushed()){
            objShooter.decreasePercentage();
        }
-       if(shooterController.isBackPushed() && !armTestFlag){
+       /*if(shooterController.isBackPushed()){
            arm.armDown();
            //objShooter.stop();
        }
        if (shooterController.isStartPushed()){
            arm.armUp();
-       }
+       }*/
        /*if(shooterController.isLStickPushed() && !armTestFlag){
            LCD.println(Line.kUser5, 1, "Inside");
            //camera.imageAnalysis();    TODO: Is this needed?
@@ -180,7 +194,11 @@ public class Team3373 extends SimpleRobot{
        /*******************
         * Servo Test Code *
         ******************/
-        
+        /**************
+         * Drive Code *
+         **************/
+         drive.setSpeed(driveStick.isAHeld(), driveStick.isBHeld());
+         drive.drive(driveStick.getRawAxis(LX), driveStick.getRawAxis(LY), driveStick.getRawAxis(RX));
         /******************
          * Demo/Test Code *
          ******************/
@@ -208,6 +226,7 @@ public class Team3373 extends SimpleRobot{
        //if  (!armTestFlag) {
        //arm.rotateTalon.set(shooterController.getRawAxis(LX));
        //}
+   }
         if (shooterController.isAHeld() && shooterController.isXHeld() && shooterController.isYHeld() && !armTestFlag){ //allows the test mode for the arm assembly to start
             armTestFlag = true;
         } else if (shooterController.isAHeld() && shooterController.isXHeld() && shooterController.isYHeld() && armTestFlag){ //turns the test mode for arm off

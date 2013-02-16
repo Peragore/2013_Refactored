@@ -13,29 +13,26 @@ import edu.wpi.first.wpilibj.Talon;
  */
 public class Elevator {
 
-    Talon elevatorTalon2 = new Talon(8);
-    Talon elevatorTalon1 = new Talon(7);
+    //Talon elevatorTalon2 = new Talon(8);
+    Talon elevatorTalons = new Talon(7);
 
 
 
-    AnalogChannel angleMeter = new AnalogChannel(5);
+    AnalogChannel angleMeter = new AnalogChannel(6);
     
     double minLimit = 0;
     double maxLimit = 5;
     double currentAngle; //= angleMeter.getVoltage();
     
     public void raise(){
-        elevatorTalon1.set(0.1);
-        elevatorTalon2.set(0.1);    
+        elevatorTalons.set(0.1);    
     }
     
     public void lower(){
-        elevatorTalon1.set(-0.1);
-        elevatorTalon2.set(-0.1);
+        elevatorTalons.set(-0.1);
     }
     public void off(){
-        elevatorTalon1.set(0);
-        elevatorTalon2.set(0);
+        elevatorTalons.set(0);
     }
     
     public void goToAngle(double targetAngle){

@@ -15,18 +15,18 @@ import edu.wpi.first.wpilibj.Talon;
  * @author RoboHawks
  */
 public class Shooter {
-        Relay shootSpike = new Relay(2);
-        Talon stageOneTalon = new Talon(5); //Creates instance of StageOne PWM
-        Talon stageTwoTalon = new Talon(6); //Creates instance of StageTwo PWM
-        AnalogChannel elevatorPot = new AnalogChannel(6);
-        DigitalInput shootLimit = new DigitalInput(7);
+        Relay shootSpike = new Relay(5);
+        Talon stageOneTalon = new Talon(5); //Shooter Talons, spin the wheels
+        Talon stageTwoTalon = new Talon(6); //Shooter Talons, spin the wheels
+        DigitalInput shootLimit = new DigitalInput(8);
        
         double percentageScaler = 0.5;
         double stageTwoVoltageOut =  0.0;
         double stageOneVoltageOut =  0.0;
        
         int elevatorStatus = 0;
-       
+        boolean limit = shootLimit.get();            
+
     public void start(){
         percentageScaler = 0.5;
         stageTwoVoltageOut =  0.1;
@@ -86,8 +86,10 @@ public class Shooter {
     public void shoot(){
         final Thread thread = new Thread(new Runnable() {
         public void run(){
-            while(!shootLimit.get()){
+            limit = shootLimit.get();
+            while(!limit){
                 shootSpike.set(Relay.Value.kForward);
+                limit = shootLimit.get();
             }
              shootSpike.set(Relay.Value.kOff); 
             } 

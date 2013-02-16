@@ -8,10 +8,9 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.templates.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.RobotDrive;
 //import edu.wpi.first.wpilibj.SimpleRobot;
 //import edu.wpi.first.wpilibj.templates.Shooter;
@@ -80,6 +79,7 @@ public class Team3373 extends SimpleRobot{
    boolean manualToggle;
    double manualStatus;
    boolean armTestFlag;
+   boolean canShoot;
    int LX = 1;
    int LY = 2;
    int Triggers = 3;
@@ -155,7 +155,19 @@ public class Team3373 extends SimpleRobot{
        /**********************
         * Shooter Algorithms *
         **********************/
-
+       if(driveStick.isLBHeld()){
+           elevator.lower();
+       } else if (driveStick.isRBHeld()){
+           elevator.raise();
+       } else {
+           elevator.off();
+       }
+       if (driveStick.isXPushed() && !driveStick.isYPushed()){
+           elevator.pwmModifier -= .05;
+       } else if (driveStick.isYPushed() && !driveStick.isXPushed()) {
+           elevator.pwmModifier += .05;
+       }
+       LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);
        if(shooterController.isAPushed()){
             objShooter.increaseSpeed();
        }
@@ -173,6 +185,7 @@ public class Team3373 extends SimpleRobot{
        }
        if (shooterController.isStartPushed()){
            objShooter.start();
+
        }
        /*if(shooterController.isLStickPushed() && !armTestFlag){
            LCD.println(Line.kUser5, 1, "Inside");

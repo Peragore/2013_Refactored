@@ -14,26 +14,31 @@ import edu.wpi.first.wpilibj.Talon;
 public class Elevator {
 
     //Talon elevatorTalon2 = new Talon(8);
-    Talon elevatorTalons = new Talon(7);
+    Talon elevatorTalon1 = new Talon(7);
+    Talon elevatorTalon2 = new Talon(8);
 
 
 
     AnalogChannel angleMeter = new AnalogChannel(6);
     
-    double minLimit = 1.2;
-    double maxLimit = 4.7;
-    double elevatorTarget;
-    double currentAngle = angleMeter.getVoltage();
+    double minLimit = 0;
+    double maxLimit = 5;
+    double basePWM = .6;
+    double pwmModifier = 0.85;
+    double currentAngle; //= angleMeter.getVoltage();
     
     public void raise(){
-        elevatorTalons.set(0.1);    
+        elevatorTalon1.set(basePWM);
+        elevatorTalon2.set(basePWM * pwmModifier);
     }
     
     public void lower(){
-        elevatorTalons.set(-0.1);
+        elevatorTalon1.set(-basePWM);
+        elevatorTalon2.set(-basePWM * pwmModifier);
     }
     public void off(){
-        elevatorTalons.set(0);
+        elevatorTalon1.set(0);
+        elevatorTalon2.set(0);
     }
     
     public void goToAngle(){

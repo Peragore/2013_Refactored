@@ -114,6 +114,7 @@ public class Team3373 extends SimpleRobot{
     }
     public void operatorControl() {
         robotTimer.start();
+        ;
         while (isOperatorControl() & isDisabled()){ 
             manualToggle = false;
             armTestFlag = false;
@@ -132,11 +133,10 @@ public class Team3373 extends SimpleRobot{
        driveStick.clearButtons();
        shooterController.clearButtons();
        
-       //if(driveStick.isStartPushed()){
+       if(driveStick.isStartPushed()){
            objShooter.shoot();
-           //LCD.println(Line.kUser5, 1, "Inside");
-
-       //}
+          LCD.println(Line.kUser5, 1, "Inside");
+       }
        if(driveStick.isBackPushed()){
            objShooter.loadFrisbee();
        }

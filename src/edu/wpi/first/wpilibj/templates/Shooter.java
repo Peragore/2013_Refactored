@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Talon;
  * @author RoboHawks
  */
 public class Shooter {
-        Relay shootSpike = new Relay(5);
+        Relay shootSpike = new Relay(4);
         Talon stageOneTalon = new Talon(6); //Shooter Talons, spin the wheels
         Talon stageTwoTalon = new Talon(5); //Shooter Talons, spin the wheels
         DigitalInput shootLimit = new DigitalInput(8);
@@ -88,8 +88,8 @@ public class Shooter {
         public void run(){
             limit = shootLimit.get();
             System.out.println(limit);
-            while(limit){
-                stageOneTalon.set(0.5);
+            while(!limit){
+                shootSpike.set(Relay.Value.kForward);
                 limit = shootLimit.get();
             }
              shootSpike.set(Relay.Value.kOff); 

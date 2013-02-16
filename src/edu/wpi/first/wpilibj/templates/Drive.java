@@ -14,7 +14,7 @@ public class Drive {
     
     public void drive(double driveLX, double driveLY, double driveRX){ 
     mechanum.setSafetyEnabled(false);
-    mechanum.mecanumDrive_Cartesian(driveLX * speed, driveLY * speed, driveRX * speed, 0); //Sets the motor speeds
+    mechanum.mecanumDrive_Cartesian(driveLX * speed, -driveLY * speed, driveRX * speed, 0); //Sets the motor speeds
     
     }
     

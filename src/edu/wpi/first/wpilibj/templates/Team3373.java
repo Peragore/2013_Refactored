@@ -41,7 +41,8 @@ public class Team3373 extends SimpleRobot{
    PickupArm arm = new PickupArm();
    Elevator elevator = new Elevator();
    //Camera camera = new Camera();
-
+   DigitalInput frontBackSwitch = new DigitalInput(12);
+   DigitalInput leftRightSwitch = new DigitalInput(13);
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
    Drive drive = new Drive();
@@ -87,16 +88,52 @@ public class Team3373 extends SimpleRobot{
    int RY = 5;
    int DP = 6;
    double rotateTest = 2.7;
+   double autonomousSpeedTarget = 1;
+   boolean goToFlag = true;
    
    //public Team3373(){
       // camera.robotInit();
     //}
     
     public void autonomous() {
-        for (int i = 0; i < 4; i++)  {
-
+        if (isAutonomous() && isEnabled()){
+                    if (leftRightSwitch.get()) //TODO: Finish
+                    while (goToFlag){
+                        elevator.goToAngle(4);
+                        if (Math.abs(4-elevator.currentAngle) <= .1) {
+                            goToFlag = false;
+                        }
+                    }
+                    objShooter.goToSpeed(autonomousSpeedTarget);
+                    try {
+                        Thread.sleep(500L);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    for (int i = 0; i <= 2; i++){
+                        objShooter.shoot();
+                        try {
+                            Thread.sleep(700L);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        objShooter.loadFrisbee();
+                         try {
+                            Thread.sleep(700);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    drive.drive(-1, 0, 0);
+                    try {
+                        Thread.sleep(5000L);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
             }
-    }
+
+        }
+    
 
     /**
      * This function is called once each time the robot enters operator control.
@@ -209,7 +246,7 @@ public class Team3373 extends SimpleRobot{
        elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isRBPushed());
        LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevatorTarget);
        LCD.println(Line.kUser2, 1, "Elevation (Volt)" + elevator.angleMeter.getVoltage());
-       elevator.goToAngle();
+       elevator.goToAngle(elevator.elevatorTarget);
        /*******************
         * Servo Test Code *
         ******************/

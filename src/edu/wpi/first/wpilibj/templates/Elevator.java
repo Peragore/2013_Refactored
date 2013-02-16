@@ -42,25 +42,25 @@ public class Elevator {
         elevatorTalon2.set(0);
     }
     
-    public void goToAngle(){
+    public void goToAngle(double elevationTarget){
         //at the moment elevatorTarget is a voltage, 
         //TODO: make some sort of conversion from voltage to angle
-        if (elevatorTarget < maxLimit && elevatorTarget > minLimit){
+        if (elevationTarget < maxLimit && elevatorTarget > minLimit){
             currentAngle = angleMeter.getVoltage();
-            if (Math.abs(elevatorTarget - currentAngle) <= .15){//TODO: check angle
+            if (Math.abs(elevationTarget - currentAngle) <= .15){//TODO: check angle
               off();
-            } else if (elevatorTarget > currentAngle){
+            } else if (elevationTarget > currentAngle){
                 raise();
-            } else if (elevatorTarget < currentAngle){
+            } else if (elevationTarget < currentAngle){
                 lower();
             }
              
         }
     }
     public void automaticElevatorTarget(boolean addTarget, boolean decreaseTarget){
-        if (addTarget){
+        if (addTarget  && elevatorTarget <= 4.7){
             elevatorTarget += .1;
-        } if (decreaseTarget){
+        } if (decreaseTarget && elevatorTarget >= 1.3){
             elevatorTarget += -.1;
         }
     }

@@ -70,6 +70,13 @@ public class Shooter {
         stageOneTalon.set(stageOneVoltageOut);
         stageTwoTalon.set(stageTwoVoltageOut);
     }
+    public void goToSpeed(double targetSpeed){
+        if (targetSpeed > stageTwoTalon.get()){
+            increaseSpeed();
+        } else if (targetSpeed < stageTwoTalon.get()){
+            decreaseSpeed();
+        }
+    }
     public void printLCD(DriverStationLCD LCD){
         double Scaler = 5936; //converts voltage to RPM for display purposes only
         double speedOne = stageOneTalon.get();

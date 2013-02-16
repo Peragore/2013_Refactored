@@ -131,6 +131,7 @@ public class Team3373 extends SimpleRobot{
        
        if(driveStick.isStartPushed()){
            objShooter.shoot();
+           LCD.println(Line.kUser5, 1, "Inside");
        }
        if(driveStick.isBackPushed()){
            objShooter.loadFrisbee();
@@ -150,9 +151,9 @@ public class Team3373 extends SimpleRobot{
        /**********************
         * Shooter Algorithms *
         **********************/
-       if(shooterController.isLBPushed()){
+       if(shooterController.isLBHeld()){
            elevator.lower();
-       } else if (shooterController.isRBPushed()){
+       } else if (shooterController.isRBHeld()){
            elevator.raise();
        } else elevator.off();
        
@@ -168,13 +169,12 @@ public class Team3373 extends SimpleRobot{
        if(shooterController.isYPushed()){
            objShooter.decreasePercentage();
        }
-       /*if(shooterController.isBackPushed()){
-           arm.armDown();
-           //objShooter.stop();
+       if(shooterController.isBackPushed()){
+           objShooter.stop();
        }
        if (shooterController.isStartPushed()){
-           arm.armUp();
-       }*/
+           objShooter.start();
+       }
        /*if(shooterController.isLStickPushed() && !armTestFlag){
            LCD.println(Line.kUser5, 1, "Inside");
            //camera.imageAnalysis();    TODO: Is this needed?

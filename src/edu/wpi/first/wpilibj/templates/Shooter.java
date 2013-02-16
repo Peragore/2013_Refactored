@@ -88,11 +88,15 @@ public class Shooter {
         public void run(){
             limit = shootLimit.get();
             System.out.println(limit);
+            while(limit){
+                shootSpike.set(Relay.Value.kForward);
+                limit = shootLimit.get();
+            }
             while(!limit){
                 shootSpike.set(Relay.Value.kForward);
                 limit = shootLimit.get();
             }
-             shootSpike.set(Relay.Value.kOff); 
+             shootSpike.set(Relay.Value.kOff);
             } 
         });
             thread.start();

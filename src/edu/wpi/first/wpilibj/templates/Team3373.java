@@ -135,7 +135,7 @@ public class Team3373 extends SimpleRobot{
        
        if(driveStick.isStartPushed()){
            objShooter.shoot();
-          LCD.println(Line.kUser5, 1, "Inside");
+          //LCD.println(Line.kUser5, 1, "Inside");
        }
        if(driveStick.isBackPushed()){
            objShooter.loadFrisbee();
@@ -181,7 +181,7 @@ public class Team3373 extends SimpleRobot{
            System.out.println("Inside");
        }*/
        //arm.rotate(targetRotatePosition);
-       objShooter.printLCD(LCD);
+       //objShooter.printLCD(LCD);
        //Arm.rotate(targetPosition);
        //objShooter.elevator();
        //Arm.grabFrisbee();
@@ -206,7 +206,9 @@ public class Team3373 extends SimpleRobot{
            elevator.pwmModifier += .05;
        }
        LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);*/
-       elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isLBPushed());
+       elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isRBPushed());
+       LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevatorTarget);
+       LCD.println(Line.kUser2, 1, "Elevation (Volt)" + elevator.angleMeter.getVoltage());
        elevator.goToAngle();
        /*******************
         * Servo Test Code *

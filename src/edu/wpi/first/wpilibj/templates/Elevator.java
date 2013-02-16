@@ -47,7 +47,7 @@ public class Elevator {
         //TODO: make some sort of conversion from voltage to angle
         if (elevatorTarget < maxLimit && elevatorTarget > minLimit){
             currentAngle = angleMeter.getVoltage();
-            if (Math.abs(elevatorTarget - currentAngle) <= .1){//TODO: check angle
+            if (Math.abs(elevatorTarget - currentAngle) <= .15){//TODO: check angle
               off();
             } else if (elevatorTarget > currentAngle){
                 raise();
@@ -60,8 +60,8 @@ public class Elevator {
     public void automaticElevatorTarget(boolean addTarget, boolean decreaseTarget){
         if (addTarget){
             elevatorTarget += .1;
-        } else if (decreaseTarget){
-            elevatorTarget -= .1;
+        } if (decreaseTarget){
+            elevatorTarget += -.1;
         }
     }
 }

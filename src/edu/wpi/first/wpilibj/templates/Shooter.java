@@ -16,9 +16,10 @@ import edu.wpi.first.wpilibj.Talon;
  */
 public class Shooter {
         Relay shootSpike = new Relay(4);
+        Relay feedSpike = new Relay(5);
         Talon stageOneTalon = new Talon(6); //Shooter Talons, spin the wheels
         Talon stageTwoTalon = new Talon(5); //Shooter Talons, spin the wheels
-        DigitalInput shootLimit = new DigitalInput(8);
+        DigitalInput shootLimit = new DigitalInput(6);
        
         double percentageScaler = 0.5;
         double stageTwoVoltageOut =  0.0;
@@ -111,12 +112,12 @@ public class Shooter {
     public void loadFrisbee(){
         final Thread thread = new Thread(new Runnable() {
         public void run(){
-            shootSpike.set(Relay.Value.kReverse);
+            feedSpike.set(Relay.Value.kReverse);
                try{
                Thread.sleep(500);
                }
                catch(InterruptedException e){}
-            shootSpike.set(Relay.Value.kOff);   
+            feedSpike.set(Relay.Value.kOff);   
             } 
         });
             thread.start();

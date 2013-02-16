@@ -8,8 +8,8 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.RobotDrive;
 //import edu.wpi.first.wpilibj.SimpleRobot;
@@ -215,7 +215,7 @@ public class Team3373 extends SimpleRobot{
            objShooter.start();
 
        }
-       objShooter.printLCD(LCD);
+       //objShooter.printLCD(LCD);
        /*if(shooterController.isLStickPushed() && !armTestFlag){
            LCD.println(Line.kUser5, 1, "Inside");
            //camera.imageAnalysis();    TODO: Is this needed?
@@ -247,10 +247,25 @@ public class Team3373 extends SimpleRobot{
            elevator.pwmModifier += .05;
        }
        LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);*/
-       elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isRBPushed());
+       //elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isRBPushed());
        LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevatorTarget);
-       LCD.println(Line.kUser2, 1, "Elevation (Volt)" + elevator.angleMeter.getVoltage());
-       elevator.goToAngle(elevator.elevatorTarget);
+       LCD.println(Line.kUser2, 1, "Elevation (Volt): " + elevator.angleMeter.getVoltage());
+       LCD.println(Line.kUser3, 1, "shootLimit: " + objShooter.shootLimit.get());
+       LCD.println(Line.kUser4, 1, "Switch1: " + frontBackSwitch.get());
+       LCD.println(Line.kUser5, 1, "Switch2: " + leftRightSwitch.get());
+       //elevator.goToAngle(elevator.elevatorTarget);
+       if (shooterController.isRBHeld()){
+           elevator.raise();
+       } else if (shooterController.isLBHeld()){
+           elevator.lower();
+       } else {
+           elevator.off();
+       }
+       /*if (shooterController.isRBPushed(){
+        *   elevator.elevatorTarget = 2.9;
+        * } else if (shooterController.isLBPushed()){
+        *   elevator.elevatorTarget = 2.5;
+        * }
        /*******************
         * Servo Test Code *
         ******************/
@@ -258,7 +273,7 @@ public class Team3373 extends SimpleRobot{
          * Drive Code *
          **************/
          drive.setSpeed(driveStick.isAHeld(), driveStick.isBHeld());
-         drive.drive(driveStick.getRawAxis(LX), driveStick.getRawAxis(LY), driveStick.getRawAxis(RX));
+         drive.drive(driveStick.getRawAxis(RX), driveStick.getRawAxis(LX), driveStick.getRawAxis(LY));
         /******************
          * Demo/Test Code *
          ******************/

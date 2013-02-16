@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.*;
 public class Drive {
     
     RobotDrive mechanum = new RobotDrive(1,2,3,4);
-    double speed = 0.75; //Default Speed
+    double speed = 0.50; //Default Speed
     //int driverPerspective = 0;
     
     public void drive(double driveLX, double driveLY, double driveRX){ 

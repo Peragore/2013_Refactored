@@ -108,6 +108,8 @@ public class Team3373 extends SimpleRobot{
             arm.demoOnFlag = false;
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
+            elevator.elevatorTarget = elevator.angleMeter.getVoltage();
+
         }
     }
     public void operatorControl() {
@@ -118,6 +120,7 @@ public class Team3373 extends SimpleRobot{
             arm.demoOnFlag = false;
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
+            elevator.elevatorTarget = elevator.angleMeter.getVoltage();
         }
    while (isOperatorControl() & isEnabled()){
    if (!armTestFlag){
@@ -129,10 +132,11 @@ public class Team3373 extends SimpleRobot{
        driveStick.clearButtons();
        shooterController.clearButtons();
        
-       if(driveStick.isStartPushed()){
+       //if(driveStick.isStartPushed()){
            objShooter.shoot();
-           LCD.println(Line.kUser5, 1, "Inside");
-       }
+           //LCD.println(Line.kUser5, 1, "Inside");
+
+       //}
        if(driveStick.isBackPushed()){
            objShooter.loadFrisbee();
        }
@@ -151,12 +155,7 @@ public class Team3373 extends SimpleRobot{
        /**********************
         * Shooter Algorithms *
         **********************/
-       if(shooterController.isLBHeld()){
-           elevator.lower();
-       } else if (shooterController.isRBHeld()){
-           elevator.raise();
-       } else elevator.off();
-       
+
        if(shooterController.isAPushed()){
             objShooter.increaseSpeed();
        }
@@ -190,7 +189,16 @@ public class Team3373 extends SimpleRobot{
        //Arm.goToPosition(2.5);
        /*
        //try {Thread.sleep(1000);} catch(Exception e){}
-       
+       /*****************
+        * Elevator Code *
+        *****************/
+       /*if(shooterController.isLBHeld()){
+           elevator.lower();
+       } else if (shooterController.isRBHeld()){
+           elevator.raise();
+       } else elevator.off();*/
+       elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isLBPushed());
+       elevator.goToAngle();
        /*******************
         * Servo Test Code *
         ******************/

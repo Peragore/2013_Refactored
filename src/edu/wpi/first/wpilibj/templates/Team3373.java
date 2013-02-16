@@ -215,6 +215,7 @@ public class Team3373 extends SimpleRobot{
            objShooter.start();
 
        }
+       objShooter.printLCD(LCD);
        /*if(shooterController.isLStickPushed() && !armTestFlag){
            LCD.println(Line.kUser5, 1, "Inside");
            //camera.imageAnalysis();    TODO: Is this needed?

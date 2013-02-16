@@ -155,19 +155,7 @@ public class Team3373 extends SimpleRobot{
        /**********************
         * Shooter Algorithms *
         **********************/
-       if(driveStick.isLBHeld()){
-           elevator.lower();
-       } else if (driveStick.isRBHeld()){
-           elevator.raise();
-       } else {
-           elevator.off();
-       }
-       if (driveStick.isXPushed() && !driveStick.isYPushed()){
-           elevator.pwmModifier -= .05;
-       } else if (driveStick.isYPushed() && !driveStick.isXPushed()) {
-           elevator.pwmModifier += .05;
-       }
-       LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);
+;
        if(shooterController.isAPushed()){
             objShooter.increaseSpeed();
        }
@@ -205,11 +193,19 @@ public class Team3373 extends SimpleRobot{
        /*****************
         * Elevator Code *
         *****************/
-       /*if(shooterController.isLBHeld()){
+      /* if(driveStick.isLBHeld()){
            elevator.lower();
-       } else if (shooterController.isRBHeld()){
+       } else if (driveStick.isRBHeld()){
            elevator.raise();
-       } else elevator.off();*/
+       } else {
+           elevator.off();
+       }
+       if (driveStick.isXPushed() && !driveStick.isYPushed()){
+           elevator.pwmModifier -= .05;
+       } else if (driveStick.isYPushed() && !driveStick.isXPushed()) {
+           elevator.pwmModifier += .05;
+       }
+       LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);*/
        elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isLBPushed());
        elevator.goToAngle();
        /*******************

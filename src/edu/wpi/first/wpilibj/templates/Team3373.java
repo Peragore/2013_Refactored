@@ -34,15 +34,15 @@ public class Team3373 extends SimpleRobot{
    //Deadband objDeadband = new Deadband();
    Timer robotTimer = new Timer();
    PickupArm arm = new PickupArm();
-   Elevator elevator = new Elevator();
-   Shooter objShooter = new Shooter();
+   Elevator elevator = Elevator.getInstance();
+   Shooter objShooter = Shooter.getInstance();
    //Camera camera = new Camera();
    DigitalInput frontBackSwitch = new DigitalInput(12);
    DigitalInput leftRightSwitch = new DigitalInput(13);
    CameraControl cameraControl = new CameraControl(); //TODO: Fix camera PWM 
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
-   Drive drive = new Drive();
+   Drive drive = Drive.getInstance();
 
    boolean test;
    boolean solenidFlag=false;
@@ -94,8 +94,7 @@ public class Team3373 extends SimpleRobot{
     
     public void autonomous() {
         if (isAutonomous() && isEnabled()){
-                    //if (leftRightSwitch.get()) //TODO: Finish
-                    drive.drive(0,0,0);
+                    if (leftRightSwitch.get()) //TODO: Finish
                     while (goToFlag){
                         elevator.goToAngle();
                         if (Math.abs(4-elevator.currentAngle) <= .1) {
@@ -144,13 +143,20 @@ public class Team3373 extends SimpleRobot{
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
             elevator.elevatorTarget = elevator.angleMeter.getVoltage();
-            objShooter.goToSpeed(0);
 
         }
     }
     public void operatorControl() {
         robotTimer.start();
-
+        ;
+        while (isOperatorControl() & isDisabled()){ 
+            manualToggle = false;
+            armTestFlag = false;
+            arm.demoOnFlag = false;
+            targetRotatePosition = arm.pot1.getVoltage(); 
+            arm.demoStatus = 0;
+            elevator.elevationTarget = elevator.angleMeter.getVoltage();
+        }
    while (isOperatorControl() & isEnabled()){
    if (!armTestFlag){
    //objTableLookUp.test();
@@ -170,7 +176,7 @@ public class Team3373 extends SimpleRobot{
        }
        
        //LCD.println(Line.kUser5, 1, "AngleVoltage: " + elevator.angleMeter.getVoltage());
-       cameraControl.moveTest(shooterController.getRawAxis(LY));
+       cameraControl.move(shooterController.getRawAxis(LY));
        LCD.println(Line.kUser5, 1, "Servo Angle: " + cameraControl.cameraServo.get());
        
        //LCD.println(Line.kUser2, 1, "running");

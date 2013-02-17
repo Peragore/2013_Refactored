@@ -7,7 +7,15 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.*;
 
 public class Drive {
-    
+    // Since drive is tied directly to PWM hardware ports, allow only one
+    // instance of Drive to ever be created.  Provide a getInstance() method
+    // to return the one and only Drive object to other classes that
+    // need to use it. This is known as a Singleton pattern.
+    private static final Drive instance = new Drive();
+    private Drive() {}  //Prevents other classes from declaring new Drive()
+    public static Drive getInstance() {
+        return instance;
+    }    
     RobotDrive mechanum = new RobotDrive(1,2,4,3);
     double speed = 0.50; //Default Speed
     //int driverPerspective = 0;

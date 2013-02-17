@@ -94,7 +94,8 @@ public class Team3373 extends SimpleRobot{
     
     public void autonomous() {
         if (isAutonomous() && isEnabled()){
-                    if (leftRightSwitch.get()) //TODO: Finish
+                    //if (leftRightSwitch.get()) //TODO: Finish
+                    drive.drive(0,0,0);
                     while (goToFlag){
                         elevator.goToAngle();
                         if (Math.abs(4-elevator.currentAngle) <= .1) {
@@ -143,21 +144,13 @@ public class Team3373 extends SimpleRobot{
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
             elevator.elevatorTarget = elevator.angleMeter.getVoltage();
+            objShooter.goToSpeed(0);
 
         }
     }
     public void operatorControl() {
         robotTimer.start();
-        ;
-        while (isOperatorControl() & isDisabled()){ 
-            manualToggle = false;
-            armTestFlag = false;
-            arm.demoOnFlag = false;
-            targetRotatePosition = arm.pot1.getVoltage(); 
-            arm.demoStatus = 0;
-            elevator.elevationTarget = elevator.angleMeter.getVoltage();
-            objShooter.goToSpeed(0);
-        }
+
    while (isOperatorControl() & isEnabled()){
    if (!armTestFlag){
    //objTableLookUp.test();
@@ -177,7 +170,7 @@ public class Team3373 extends SimpleRobot{
        }
        
        //LCD.println(Line.kUser5, 1, "AngleVoltage: " + elevator.angleMeter.getVoltage());
-       cameraControl.move(shooterController.getRawAxis(LY));
+       cameraControl.moveTest(shooterController.getRawAxis(LY));
        LCD.println(Line.kUser5, 1, "Servo Angle: " + cameraControl.cameraServo.get());
        
        //LCD.println(Line.kUser2, 1, "running");

@@ -13,11 +13,12 @@ import edu.wpi.first.wpilibj.*;
 public class CameraControl {
 
     Servo cameraServo = new Servo(9);
+    double servoTarget;
 
     public void move(double joystick) {
 
         //Change this variable to change the speed that the servo moves. 1000 is most likely too low.
-        double change = joystick / 5000;//This number is to compensate for it running this code millions of times per second
+        double change = joystick / 1000;//This number is to compensate for it running this code millions of times per second
         System.out.println("Change: " + change);
         if (!((cameraServo.get() + change) < 0.00) & !((cameraServo.get() + change) > 1.00)) {//Checks for correct values in the range of the servo
 
@@ -25,9 +26,10 @@ public class CameraControl {
 
         }
     }
-    public void moveTest(double joystick, boolean enabledButton){
-        if (!enabledButton) {
-            cameraServo.set((joystick + 1)/2);
-        }
+    public void moveTest(double joystick){
+            servoTarget = (joystick)/1000;
+            servoTarget = cameraServo.get() + servoTarget;
+            System.out.println("Servo: " + cameraServo.get());
+            cameraServo.set(servoTarget);
     }
 }

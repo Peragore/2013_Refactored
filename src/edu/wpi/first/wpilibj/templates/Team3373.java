@@ -156,6 +156,7 @@ public class Team3373 extends SimpleRobot{
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
             elevator.elevationTarget = elevator.angleMeter.getVoltage();
+            objShooter.goToSpeed(0);
         }
    while (isOperatorControl() & isEnabled()){
    if (!armTestFlag){

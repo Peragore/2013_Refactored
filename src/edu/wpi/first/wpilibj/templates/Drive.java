@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.*;
 
 public class Drive {
     
-    RobotDrive mechanum = new RobotDrive(1,2,3,4);
+    RobotDrive mechanum = new RobotDrive(1,2,4,3);
     double speed = 0.50; //Default Speed
     //int driverPerspective = 0;
     
-    public void drive(double driveLX, double driveLY, double driveRX){ 
+    public void drive(double driveLX, double driveRX, double driveLY){ //these are the correct variable names.....
     mechanum.setSafetyEnabled(false);
-    mechanum.mecanumDrive_Cartesian(driveLX * speed, driveLY * speed, driveRX * speed, 0); //Sets the motor speeds
+    mechanum.mecanumDrive_Cartesian(driveLX * speed, driveRX * speed, -driveLY * speed, 0); //Sets the motor speeds; Negative is to set forward to be forward
     
     }
     

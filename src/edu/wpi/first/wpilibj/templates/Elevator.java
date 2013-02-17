@@ -22,8 +22,8 @@ public class Elevator {
     AnalogChannel angleMeter = new AnalogChannel(1);
     
     double minLimit = 2.45;
-    double maxLimit = 3.0;
-    double basePWM = .7;
+    double maxLimit = 3;
+    double basePWM = .6;
     double pwmModifier = 0.85;
     double elevatorTarget;
     double currentAngle = angleMeter.getVoltage();

@@ -12,7 +12,16 @@ import edu.wpi.first.wpilibj.Talon;
  * @author Jamie
  */
 public class Elevator {
-
+    // Since elevator is tied directly to PWM hardware ports, allow only one
+    // instance of Elevator to ever be created.  Provide a getInstance() method
+    // to return the one and only Elevator object to other classes that
+    // need to use it. This is known as a Singleton pattern.
+    private static final Elevator instance = new Elevator();
+    private Elevator() {}  //Prevents other classes from declaring new Elevator()
+    public static Elevator getInstance() {
+        return instance;
+    }
+    
     //Talon elevatorTalon2 = new Talon(8);
     Talon elevatorTalon1 = new Talon(7);
     Talon elevatorTalon2 = new Talon(8);

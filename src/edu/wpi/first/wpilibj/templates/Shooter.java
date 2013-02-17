@@ -15,6 +15,15 @@ import edu.wpi.first.wpilibj.Talon;
  * @author RoboHawks
  */
 public class Shooter {
+    // Since shooter is tied directly to PWM hardware ports, allow only one
+    // instance of shooter to ever be created.  Provide a getInstance() method
+    // to return the one and only shooter object to other classes that
+    // need to use it. This is known as a Singleton pattern.
+    private static final Shooter instance = new Shooter();
+    private Shooter() {}  //Prevents other classes from declaring new Shooter()
+    public static Shooter getInstance() {
+        return instance;
+    }
         Relay shootSpike = new Relay(4);
         Relay feedSpike = new Relay(5);
         Talon stageOneTalon = new Talon(6); //Shooter Talons, spin the wheels

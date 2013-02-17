@@ -34,15 +34,15 @@ public class Team3373 extends SimpleRobot{
    //Deadband objDeadband = new Deadband();
    Timer robotTimer = new Timer();
    PickupArm arm = new PickupArm();
-   Elevator elevator = new Elevator();
-   Shooter objShooter = new Shooter();
+   Elevator elevator = Elevator.getInstance();
+   Shooter objShooter = Shooter.getInstance();
    //Camera camera = new Camera();
    DigitalInput frontBackSwitch = new DigitalInput(12);
    DigitalInput leftRightSwitch = new DigitalInput(13);
    CameraControl cameraControl = new CameraControl(); //TODO: Fix camera PWM 
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
-   Drive drive = new Drive();
+   Drive drive = Drive.getInstance();
 
    boolean test;
    boolean solenidFlag=false;

@@ -17,7 +17,7 @@ public class PickupArm {
     
     Relay grabSpike = new Relay(2);
     Relay vacuumSpike = new Relay(1);
-    Talon rotateTalon = new Talon(9);
+    Talon rotateTalon = new Talon(10);
     AnalogChannel pot1 = new AnalogChannel(7);
     DigitalInput armLimit = new DigitalInput(3); //returns true if clicked
     Timer robotTimer = new Timer();

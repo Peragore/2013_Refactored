@@ -21,7 +21,7 @@ public class Shooter {
         Talon stageTwoTalon = new Talon(5); //Shooter Talons, spin the wheels
         DigitalInput shootLimit = new DigitalInput(6);
        
-        double percentageScaler = 0.5;
+        double percentageScaler = 0.75;
         double stageTwoVoltageOut =  0.0;
         double stageOneVoltageOut =  0.0;
        
@@ -72,11 +72,8 @@ public class Shooter {
         stageTwoTalon.set(stageTwoVoltageOut);
     }
     public void goToSpeed(double targetSpeed){
-        if (targetSpeed > stageTwoTalon.get()){
-            increaseSpeed();
-        } else if (targetSpeed < stageTwoTalon.get()){
-            decreaseSpeed();
-        }
+         stageOneTalon.set(targetSpeed * percentageScaler);
+         stageTwoTalon.set(targetSpeed);
     }
     public void printLCD(DriverStationLCD LCD){
         double Scaler = 5936; //converts voltage to RPM for display purposes only

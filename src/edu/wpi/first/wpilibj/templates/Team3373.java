@@ -8,8 +8,8 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.RobotDrive;
 //import edu.wpi.first.wpilibj.SimpleRobot;
@@ -25,25 +25,21 @@ public class Team3373 extends SimpleRobot{
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
-   //Servo frontCameraServo = new Servo(6);//camera class?
-   
-   
-   
-   // what is this used for?
-   
+
    DriverStationLCD LCD = DriverStationLCD.getInstance();
    //SmartDashboard smartDashboard;
    SuperJoystick driveStick = new SuperJoystick(1); 
    SuperJoystick shooterController = new SuperJoystick(2);
-   Shooter objShooter = new Shooter();
+   
    //Deadband objDeadband = new Deadband();
    Timer robotTimer = new Timer();
    PickupArm arm = new PickupArm();
    Elevator elevator = new Elevator();
+   Shooter objShooter = new Shooter();
    //Camera camera = new Camera();
    DigitalInput frontBackSwitch = new DigitalInput(12);
    DigitalInput leftRightSwitch = new DigitalInput(13);
-   //CameraControl cameraControl = new CameraControl(); TODO: Fix camera PWM 
+   CameraControl cameraControl = new CameraControl(); //TODO: Fix camera PWM 
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
    Drive drive = new Drive();
@@ -100,7 +96,7 @@ public class Team3373 extends SimpleRobot{
         if (isAutonomous() && isEnabled()){
                     if (leftRightSwitch.get()) //TODO: Finish
                     while (goToFlag){
-                        elevator.goToAngle(4);
+                        elevator.goToAngle(3);
                         if (Math.abs(4-elevator.currentAngle) <= .1) {
                             goToFlag = false;
                         }
@@ -114,18 +110,18 @@ public class Team3373 extends SimpleRobot{
                     for (int i = 0; i <= 2; i++){
                         objShooter.shoot();
                         try {
-                            Thread.sleep(700L);
+                            Thread.sleep(2000L);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
-                        objShooter.loadFrisbee();
+                        objShooter.loadFrisbee(elevator);
                          try {
                             Thread.sleep(700);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
                     }
-                    drive.drive(-1, 0, 0);
+                    //drive.drive(-1, 0, 0);
                     try {
                         Thread.sleep(5000L);
                     } catch (InterruptedException ex) {
@@ -176,11 +172,13 @@ public class Team3373 extends SimpleRobot{
           //LCD.println(Line.kUser5, 1, "Inside");
        }
        if(driveStick.isBackPushed()){
-           objShooter.loadFrisbee();
+           objShooter.loadFrisbee(elevator);
        }
        
-       //cameraControl.move(shooterController.getRawAxis(LY));
-
+       //LCD.println(Line.kUser5, 1, "AngleVoltage: " + elevator.angleMeter.getVoltage());
+       cameraControl.move(shooterController.getRawAxis(LY));
+       LCD.println(Line.kUser5, 1, "Servo Angle: " + cameraControl.cameraServo.get());
+       
        //LCD.println(Line.kUser2, 1, "running");
        
         //test = objShooter.shootLimit.get();
@@ -222,7 +220,6 @@ public class Team3373 extends SimpleRobot{
            System.out.println("Inside");
        }*/
        //arm.rotate(targetRotatePosition);
-       //objShooter.printLCD(LCD);
        //Arm.rotate(targetPosition);
        //objShooter.elevator();
        //Arm.grabFrisbee();
@@ -248,11 +245,11 @@ public class Team3373 extends SimpleRobot{
        }
        LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);*/
        //elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isRBPushed());
-       LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevatorTarget);
+       /*LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevatorTarget);
        LCD.println(Line.kUser2, 1, "Elevation (Volt): " + elevator.angleMeter.getVoltage());
        LCD.println(Line.kUser3, 1, "shootLimit: " + objShooter.shootLimit.get());
        LCD.println(Line.kUser4, 1, "Switch1: " + frontBackSwitch.get());
-       LCD.println(Line.kUser5, 1, "Switch2: " + leftRightSwitch.get());
+       LCD.println(Line.kUser5, 1, "Switch2: " + leftRightSwitch.get());*/
        //elevator.goToAngle(elevator.elevatorTarget);
        if (shooterController.isRBHeld()){
            elevator.raise();
@@ -272,8 +269,8 @@ public class Team3373 extends SimpleRobot{
         /**************
          * Drive Code *
          **************/
-         drive.setSpeed(driveStick.isAHeld(), driveStick.isBHeld());
-         drive.drive(driveStick.getRawAxis(RX), driveStick.getRawAxis(LX), driveStick.getRawAxis(LY));
+         //drive.setSpeed(driveStick.isAHeld(), driveStick.isBHeld());
+         drive.drive(driveStick.getRawAxis(LX), driveStick.getRawAxis(RX), driveStick.getRawAxis(LY));
         /******************
          * Demo/Test Code *
          ******************/

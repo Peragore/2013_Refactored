@@ -12,9 +12,9 @@ public class Drive {
     double speed = 0.50; //Default Speed
     //int driverPerspective = 0;
     
-    public void drive(double driveLX, double driveRX, double driveLY){ 
+    public void drive(double driveLX, double driveRX, double driveLY){ //these are the correct variable names.....
     mechanum.setSafetyEnabled(false);
-    mechanum.mecanumDrive_Cartesian(driveLX * speed, driveRX * speed, -driveLY * speed, 0); //Sets the motor speeds
+    mechanum.mecanumDrive_Cartesian(driveLX * speed, driveRX * speed, -driveLY * speed, 0); //Sets the motor speeds; Negative is to set forward to be forward
     
     }
     

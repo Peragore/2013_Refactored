@@ -21,12 +21,13 @@ public class Shooter {
         Talon stageTwoTalon = new Talon(5); //Shooter Talons, spin the wheels
         DigitalInput shootLimit = new DigitalInput(6);
        
-        double percentageScaler = 0.5;
+        double percentageScaler = 0.75;
         double stageTwoVoltageOut =  0.0;
         double stageOneVoltageOut =  0.0;
        
         int elevatorStatus = 0;
-        boolean limit = shootLimit.get();            
+        boolean limit = shootLimit.get();     
+    
 
     public void start(){
         percentageScaler = 0.5;
@@ -109,12 +110,16 @@ public class Shooter {
         });
             thread.start();
     }
-    public void loadFrisbee(){
+    public void loadFrisbee(Elevator elev){
+        final Elevator elv = elev;
         final Thread thread = new Thread(new Runnable() {
+        
         public void run(){
             feedSpike.set(Relay.Value.kReverse);
+               long sleep=350;
+               sleep=350;// + Double.doubleToLongBits((3.00 - elv.angleMeter.getVoltage()));
                try{
-               Thread.sleep(500);
+               Thread.sleep(sleep);
                }
                catch(InterruptedException e){}
             feedSpike.set(Relay.Value.kOff);   

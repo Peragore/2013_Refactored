@@ -239,6 +239,8 @@ public class Team3373 extends SimpleRobot{
        SmartDashboard.putNumber("Elevation (No Average): ", elevator.angleMeter.getVoltage());
        //SmartDashboard.putNumber("Elevation (Their Average): ", elevator.angleMeter.getAverageVoltage());
        LCD.println(Line.kUser3, 1, "Current Angle:" + elevator.currentAngle);
+       SmartDashboard.putNumber("Elevator Angle: ", elevator.elevatorAngleMath());
+       SmartDashboard.putNumber("Servo Angle: ", cameraControl.servoAngleMath());
        //LCD.println(Line.kUser3, 1, "shootLimit: " + objShooter.shootLimit.get());
        //LCD.println(Line.kUser4, 1, "Switch1: " + frontBackSwitch.get());
        //LCD.println(Line.kUser5, 1, "Switch2: " + leftRightSwitch.get());

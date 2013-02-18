@@ -14,6 +14,12 @@ public class CameraControl {
 
     Servo cameraServo = new Servo(9);
     double servoTarget = .5;
+    double servoMin = .6;
+    double servoMax = 1;
+    double minDegrees = 89.5;
+    double maxDegrees = 45;
+    double slope;
+    double servoAngle;
 
     public void move(double joystick) {
 
@@ -33,7 +39,13 @@ public class CameraControl {
         if (servoTarget > 1) {servoTarget = 1;}
         if (servoTarget < 0) {servoTarget = 0;}
             System.out.println("Servo: " + servoTarget);
+            if (servoTarget > .6 && servoTarget < 1);
             cameraServo.set(servoTarget);
         
+    }
+    public double servoAngleMath(){
+        slope = (maxDegrees - minDegrees)/(servoMax - servoMin);
+        servoAngle = (slope * cameraServo.get());
+        return servoAngle;
     }
 }

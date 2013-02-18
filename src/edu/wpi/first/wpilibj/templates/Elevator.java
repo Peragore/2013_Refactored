@@ -38,14 +38,18 @@ public class Elevator {
 
     AnalogChannel angleMeter = new AnalogChannel(1);
     
-    double minLimit = 2.45;
-    double maxLimit = 3;
+    double minLimit = 2.5;
+    double maxLimit = 3.2;
+    double minDegrees = 21.9;
+    double maxDegrees = 50.6;
     double basePWM = .4;
     double pwmModifier = 0.85;
     double elevatorTarget;
     double currentAngle = angleMeter.getVoltage();
     double elevationTarget = angleMeter.getVoltage();;
     boolean goToFlag = false;
+    double slope;
+    double angleCalc;
     //double angle = 41(voltage - 2.5) + 21.9;
     public void raise(){
         elevatorTalon1.set(basePWM);
@@ -60,6 +64,12 @@ public class Elevator {
         elevatorTalon1.set(0);
         elevatorTalon2.set(0);
     }
+   public double elevatorAngleMath(){
+       slope = (maxDegrees - minDegrees)/(maxLimit - minLimit);
+       angleCalc = (slope*(getAverageVoltage2() - 2.5) + minDegrees);
+       return angleCalc;
+   } 
+
        public double getAverageVoltage2() {
         
  

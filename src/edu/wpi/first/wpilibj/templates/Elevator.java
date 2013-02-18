@@ -75,12 +75,14 @@ public class Elevator {
         final Thread thread = new Thread(new Runnable() {
         public void run(){
                 goToFlag = false;
+                int test;
                 while(elevationTarget > currentAngle&& elevationTarget < maxLimit){
                     raise();
                     if(elevationTarget < currentAngle){
                         break;
                     }
                 }
+                
                 while(elevationTarget < currentAngle&& elevationTarget > minLimit){
                     lower();
                     if(elevationTarget > currentAngle){

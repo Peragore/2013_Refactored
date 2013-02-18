@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.lang.Math;
 //import edu.wpi.first.wpilibj.RobotDrive;
 //import edu.wpi.first.wpilibj.SimpleRobot;
 //import edu.wpi.first.wpilibj.templates.Shooter;
@@ -43,6 +44,8 @@ public class Team3373 extends SimpleRobot{
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
    Drive drive = Drive.getInstance();
+   Deadband deadband = new Deadband();
+   NewMath newMath = new NewMath();
 
    boolean test;
    boolean solenidFlag=false;
@@ -142,21 +145,14 @@ public class Team3373 extends SimpleRobot{
             arm.demoOnFlag = false;
             targetRotatePosition = arm.pot1.getVoltage(); 
             arm.demoStatus = 0;
-            elevator.elevatorTarget = elevator.angleMeter.getVoltage();
+            elevator.elevationTarget = elevator.angleMeter.getVoltage();
+            cameraControl.servoTarget = .5;
 
         }
     }
     public void operatorControl() {
         robotTimer.start();
         ;
-        while (isOperatorControl() & isDisabled()){ 
-            manualToggle = false;
-            armTestFlag = false;
-            arm.demoOnFlag = false;
-            targetRotatePosition = arm.pot1.getVoltage(); 
-            arm.demoStatus = 0;
-            elevator.elevationTarget = elevator.angleMeter.getVoltage();
-        }
    while (isOperatorControl() & isEnabled()){
    if (!armTestFlag){
    //objTableLookUp.test();
@@ -176,7 +172,7 @@ public class Team3373 extends SimpleRobot{
        }
        
        //LCD.println(Line.kUser5, 1, "AngleVoltage: " + elevator.angleMeter.getVoltage());
-       cameraControl.move(shooterController.getRawAxis(LY));
+       cameraControl.moveTest(shooterController.getRawAxis(LY));
        LCD.println(Line.kUser5, 1, "Servo Angle: " + cameraControl.cameraServo.get());
        
        //LCD.println(Line.kUser2, 1, "running");
@@ -235,7 +231,13 @@ public class Team3373 extends SimpleRobot{
        LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);*/
        //elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isRBPushed());
        LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevationTarget);
-       LCD.println(Line.kUser2, 1, "Elevation (Volt): " + elevator.angleMeter.getVoltage());
+       //LCD.println(Line.kUser2, 1, "Elv(Volt): " + elevator.angleMeter.getAverageVoltage());
+       elevator.angleMeter.setAverageBits(128);
+       //SmartDashboard.putNumber("Average Bits: ", elevator.angleMeter.getAverageBits());
+       //SmartDashboard.putNumber("Oversampling Bits: ", elevator.angleMeter.getOversampleBits());
+       SmartDashboard.putNumber("Elevation (Our Average): ", elevator.getAverageVoltage2());
+       SmartDashboard.putNumber("Elevation (No Average): ", elevator.angleMeter.getVoltage());
+       //SmartDashboard.putNumber("Elevation (Their Average): ", elevator.angleMeter.getAverageVoltage());
        LCD.println(Line.kUser3, 1, "Current Angle:" + elevator.currentAngle);
        //LCD.println(Line.kUser3, 1, "shootLimit: " + objShooter.shootLimit.get());
        //LCD.println(Line.kUser4, 1, "Switch1: " + frontBackSwitch.get());
@@ -265,10 +267,8 @@ public class Team3373 extends SimpleRobot{
        if(driveStick.isYPushed()){
            elevator.setTarget(2.95);
        }
-       elevator.goTo();
-       elevator.angleMeter.setOversampleBits(32);
-       SmartDashboard.putNumber("Average Number", elevator.angleMeter.getAverageVoltage());
-       //elevator.goToAngle();
+       //elevator.goTo();
+       elevator.goToAngle();
        /*if (shooterController.isRBPushed(){
         *   elevator.elevatorTarget = 2.9;
         * } else if (shooterController.isLBPushed()){
@@ -281,7 +281,7 @@ public class Team3373 extends SimpleRobot{
          * Drive Code *
          **************/
          drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld());
-         drive.drive(driveStick.getRawAxis(RX), driveStick.getRawAxis(LX), driveStick.getRawAxis(LY));
+         drive.drive(newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(RX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LY), 0.1)));
         /******************
          * Demo/Test Code *
          ******************/

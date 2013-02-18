@@ -22,7 +22,7 @@ public class Drive {
     
     public void drive(double driveLX, double driveRX, double driveLY){ //these are the correct variable names.....
     mechanum.setSafetyEnabled(false);
-    mechanum.mecanumDrive_Cartesian(driveLX * speed, driveRX * speed, -driveLY * speed, 0); //Sets the motor speeds; Negative is to set forward to be forward
+    mechanum.mecanumDrive_Cartesian(driveLX * speed, -driveRX * speed, -driveLY * speed, 0); //Sets the motor speeds; Negative is to set forward to be forward
     
     }
     
@@ -31,7 +31,7 @@ public class Drive {
         if(turbo && !sniper){
             speed = 1.00; //In turbo mode
         } else if(!turbo && sniper){
-            speed = 0.50; //In sniper mode
+            speed = 0.25; //In sniper mode
         } else {
             speed = 0.75; //In default mode
         }

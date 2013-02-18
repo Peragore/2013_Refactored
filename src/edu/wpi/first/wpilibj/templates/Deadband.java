@@ -10,4 +10,14 @@ package edu.wpi.first.wpilibj.templates;
  */
 public class Deadband {
     
+    public double zero(double input, double range){
+        
+        if(input > -range && input < range){
+            return 0.00;
+        } else {
+            return input;
+        }
+        
+    }
+    
 }

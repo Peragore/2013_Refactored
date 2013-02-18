@@ -254,18 +254,19 @@ public class Team3373 extends SimpleRobot{
        }*/
        
        if(driveStick.isAPushed()){
-           elevator.elevationTarget = 2.5;
+           elevator.setTarget(2.5);
        }
        if(driveStick.isBPushed()){
-           elevator.elevationTarget = 2.65;
+           elevator.setTarget(2.65);
        }
        if(driveStick.isXPushed()){
-           elevator.elevationTarget = 2.75;
+           elevator.setTarget(2.75);
        }      
        if(driveStick.isYPushed()){
-           elevator.elevationTarget = 2.95;
+           elevator.setTarget(2.95);
        }
-       elevator.goToAngle();
+       elevator.goTo();
+       //elevator.goToAngle();
        /*if (shooterController.isRBPushed(){
         *   elevator.elevatorTarget = 2.9;
         * } else if (shooterController.isLBPushed()){

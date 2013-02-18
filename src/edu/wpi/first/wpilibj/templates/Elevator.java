@@ -5,6 +5,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Talon;
 
 /**
@@ -37,6 +38,7 @@ public class Elevator {
     double elevatorTarget;
     double currentAngle = angleMeter.getVoltage();
     double elevationTarget = angleMeter.getVoltage();;
+    boolean goToFlag = false;
     
     public void raise(){
         elevatorTalon1.set(basePWM);
@@ -64,6 +66,31 @@ public class Elevator {
           lower();
         } 
         
+    }
+    public void setTarget(double a){
+        elevationTarget = a;
+        goToFlag = true;
+    }
+    public void goTo(){
+        final Thread thread = new Thread(new Runnable() {
+        public void run(){
+                goToFlag = false;
+                while(elevationTarget > currentAngle&& elevationTarget < maxLimit){
+                    raise();
+                    if(elevationTarget < currentAngle){
+                        break;
+                    }
+                }
+                while(elevationTarget < currentAngle&& elevationTarget > minLimit){
+                    lower();
+                    if(elevationTarget > currentAngle){
+                        break;
+                    }
+                }
+                off();
+                }
+            });
+                thread.start();
     }
     /*public void automaticElevatorTarget(boolean addTarget, boolean decreaseTarget){
         if (addTarget  && elevatorTarget <= 4.7){

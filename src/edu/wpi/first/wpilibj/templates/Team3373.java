@@ -266,6 +266,8 @@ public class Team3373 extends SimpleRobot{
            elevator.setTarget(2.95);
        }
        elevator.goTo();
+       elevator.angleMeter.setOversampleBits(32);
+       SmartDashboard.putNumber("Average Number", elevator.angleMeter.getAverageVoltage());
        //elevator.goToAngle();
        /*if (shooterController.isRBPushed(){
         *   elevator.elevatorTarget = 2.9;

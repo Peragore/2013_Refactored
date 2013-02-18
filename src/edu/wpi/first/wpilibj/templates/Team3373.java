@@ -37,7 +37,7 @@ public class Team3373 extends SimpleRobot{
    PickupArm arm = new PickupArm();
    Elevator elevator = Elevator.getInstance();
    Shooter objShooter = Shooter.getInstance();
-   //Camera camera = new Camera();
+   Camera camera = new Camera();
    DigitalInput frontBackSwitch = new DigitalInput(12);
    DigitalInput leftRightSwitch = new DigitalInput(13);
    CameraControl cameraControl = new CameraControl(); //TODO: Fix camera PWM 
@@ -91,9 +91,9 @@ public class Team3373 extends SimpleRobot{
    double autonomousSpeedTarget = 1;
    boolean goToFlag = true;
    
-   //public Team3373(){
-      // camera.robotInit();
-    //}
+   public Team3373(){
+      camera.robotInit(LCD);
+    }
     
     public void autonomous() {
         if (isAutonomous() && isEnabled()){
@@ -179,13 +179,13 @@ public class Team3373 extends SimpleRobot{
        
         //test = objShooter.shootLimit.get();
         //System.out.println(test);
-       /*if(shooterController.isStartPushed()){
-           LCD.println(Line.kUser5, 1, "Inside");//TODO
-           //camera.imageAnalysis();
+       if(shooterController.isStartPushed()){
+          // LCD.println(Line.kUser5, 1, "Inside");//TODO
+           camera.imageAnalysis();
            System.out.println("Inside");
            //objShooter.start();
            //arm.armUp();
-       }*/
+       }
        /**********************
         * Shooter Algorithms *
         **********************/
@@ -205,7 +205,7 @@ public class Team3373 extends SimpleRobot{
        if(shooterController.isBackPushed()){
            objShooter.stop();
        }
-       if (shooterController.isStartPushed()){
+       //if (shooterController.isStartPushed()){
            objShooter.start();
 
        }
@@ -374,7 +374,17 @@ public class Team3373 extends SimpleRobot{
         LCD.updateLCD();
     
         
+        /********************
+         * Competition Code *
+         ********************/
+            /****************
+             * Shooter Code *
+             ****************/
+             if (shooterController.isRBPushed()){
+                 
+             }
+        
         }
     }
-}
+
 

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
 import edu.wpi.first.wpilibj.image.NIVision.Rect;
+import java.util.Hashtable;
 
 /**
  * Sample program to use NIVision to find rectangles in the scene that are illuminated
@@ -17,8 +18,8 @@ import edu.wpi.first.wpilibj.image.NIVision.Rect;
  * 
  * The CriteriaCollection is the set of criteria that is used to filter the set of
  * rectangles that are detected. In this example we're looking for rectangles with
- * a minimum width of 30 pixels and maximum of 400 pixels.
- * 
+ * a minimum width of 30 pixels and maximum of 400 pixels. 
+* 
  * The algorithm first does a color threshold operation that only takes objects in the
  * scene that have a bright green color component. Then a convex hull operation fills 
  * all the rectangle outlines (even the partially occluded ones). Then a small object filter
@@ -34,7 +35,7 @@ import edu.wpi.first.wpilibj.image.NIVision.Rect;
 public class Camera {
     
     DriverStationLCD LCD;
-    ColorImage image = null; //moved up here
+    ColorImage image = null; //moved up her
     final int XMAXSIZE = 24;
     final int XMINSIZE = 24;
     final int YMAXSIZE = 24;
@@ -79,6 +80,7 @@ public class Camera {
     }
 
     public void imageAnalysis() {
+            Hashtable hash = new Hashtable();
             try {
                 /**
                  * Do the image capture with the camera and apply the algorithm described above. This
@@ -117,6 +119,7 @@ public class Camera {
                     {
                         System.out.println("particle: " + i + "is a High Goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
                         high_distance=computeDistance(thresholdImage, report, i, true);
+                        //hash.("High Distance", (computeDistance(thresholdImage, report, i, true)));
 			System.out.println("Distance: " + high_distance);
                         
                     } else if (scoreCompare(scores[i], true)) {

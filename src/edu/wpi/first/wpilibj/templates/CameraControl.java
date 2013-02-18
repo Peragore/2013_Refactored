@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.*;
 public class CameraControl {
 
     Servo cameraServo = new Servo(9);
-    double servoTarget;
+    double servoTarget = .5;
 
     public void move(double joystick) {
 
@@ -27,9 +27,13 @@ public class CameraControl {
         }
     }
     public void moveTest(double joystick){
-            servoTarget = (joystick)/1000;
-            servoTarget = cameraServo.get() + servoTarget;
-            System.out.println("Servo: " + cameraServo.get());
+        if (joystick > .2 || joystick <-.2){    
+        servoTarget += (joystick)/100;
+        }
+        if (servoTarget > 1) {servoTarget = 1;}
+        if (servoTarget < 0) {servoTarget = 0;}
+            System.out.println("Servo: " + servoTarget);
             cameraServo.set(servoTarget);
+        
     }
 }

@@ -96,6 +96,9 @@ public class Team3373 extends SimpleRobot{
    double[] targetSlot;
    double[] targetAngle;
    
+   double climbingPosition = 3.1;
+   boolean controlFlag = true;
+           
    public Team3373(){
       camera.robotInit();
     }
@@ -428,6 +431,21 @@ public class Team3373 extends SimpleRobot{
             }
             if (driveStick.isBackPushed()){
                 objShooter.loadFrisbee(elevator);
+            }
+            
+            /**************
+             * Climb Code *
+             **************/
+            if(driveStick.isStartHeld() && shooterController.isLBHeld() && shooterController.isRBHeld()){
+                controlFlag = true;
+            }
+            
+            if(driveStick.isXPushed()){
+                elevator.goTo(climbingPosition);
+            }
+            if(driveStick.isYPushed()){
+                elevator.lower();
+                controlFlag = false;
             }
         }
     }

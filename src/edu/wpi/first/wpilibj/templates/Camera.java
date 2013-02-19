@@ -34,7 +34,6 @@ import java.util.Hashtable;
 
 public class Camera {
     
-    DriverStationLCD LCD;
     ColorImage image = null; //moved up her
     final int XMAXSIZE = 24;
     final int XMINSIZE = 24;
@@ -61,7 +60,7 @@ public class Camera {
     double middle_distance = 0.0;
     double high_distance = 0.0;
     
-    AxisCamera camera = AxisCamera.getInstance();          // the axis camera object (connected to the switch)
+    AxisCamera camera; // = AxisCamera.getInstance();          // the axis camera object (connected to the switch)
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
     
     public class Scores {
@@ -72,15 +71,16 @@ public class Camera {
         double yEdge;
     }
     
-    public void robotInit(DriverStationLCD lcd){
-        LCD = lcd;
-        //camera = AxisCamera.getInstance();  // get an instance of the camera
+    public void robotInit(){
+        System.out.println("inside init");
+        camera = AxisCamera.getInstance();  // get an instance of the camera
         cc = new CriteriaCollection();      // create the criteria for the particle filter
         cc.addCriteria(MeasurementType.IMAQ_MT_AREA, 500, 65535, false);
     }
 
     public void imageAnalysis() {
             Hashtable hash = new Hashtable();
+            System.out.println("Inside image Analyis");
             try {
                 /**
                  * Do the image capture with the camera and apply the algorithm described above. This
@@ -92,14 +92,18 @@ public class Camera {
                    image = camera.getImage();     // comment if using stored images
                 } catch (AxisCameraException ace) {
                 }
-                //ColorImage image;                           // next 2 lines read image from flash on cRIO
-                //image = new RGBImage("/new/threshold.bmp");		// get the sample image from the cRIO flash
+                if  (image==null) System.out.println("null");
                 BinaryImage thresholdImage = image.thresholdHSV(60, 100, 90, 255, 20, 255);   // keep only red objects
-                //thresholdImage.write("/new/threshold.bmp");
+                //image = image.replaceBluePlane(image.getRedPlane());
+                //BinaryImage thresholdImage = image.thresholdHSL(40, 120, 140, 255, 10, 150);   // keep only red objects
+                //BinaryImage thresholdImage2 = image.thresholdRGB(40, 120, 140, 255, 0, 255);
+                //image.write("/vision/rawImage.bmp");
+                thresholdImage.write("/vision/threshold.bmp");
+                //thresholdImage2.write("/vision/threshold2.bmp");
                 BinaryImage convexHullImage = thresholdImage.convexHull(false);          // fill in occluded rectangles
-                //convexHullImage.write("/new/convexHull.bmp");
+                //convexHullImage.write("/vision/convexHull.bmp");
                 BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // filter out small particles
-                //filteredImage.write("/new/filteredImage.bmp");
+                //filteredImage.write("/vision/filteredImage.bmp");
                 convexHullImage.free(); //moved up here
 
                 
@@ -124,8 +128,8 @@ public class Camera {
                         
                     } else if (scoreCompare(scores[i], true)) {
 			System.out.println("particle: " + i + "is a Middle Goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
-                        middle_distance=computeDistance(thresholdImage, report, i, false);
-                        LCD.println(DriverStationLCD.Line.kUser5, 1, "Mid Dist=" + middle_distance);
+                        middle_distance=computeDistance(thresholdImage, report, i, false)+4.5;
+                        System.out.println("Mid Dist="+middle_distance);
                     } else {
                         //System.out.println("particle: " + i + "is not a goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
                     }
@@ -330,9 +334,5 @@ public class Camera {
         total = 100*total/(rowAverages.length);
         return total;
     }
-    
-    public void setLCD(DriverStationLCD lcd){
-        LCD = lcd;
-    }
-    
+        
 }

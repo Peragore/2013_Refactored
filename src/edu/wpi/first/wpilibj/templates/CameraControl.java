@@ -38,7 +38,7 @@ public class CameraControl {
         }
         if (servoTarget > 1) {servoTarget = 1;}
         if (servoTarget < 0) {servoTarget = 0;}
-            System.out.println("Servo: " + servoTarget);
+            //System.out.println("Servo: " + servoTarget);
             if (servoTarget > .6 && servoTarget < 1);
             cameraServo.set(servoTarget);
         

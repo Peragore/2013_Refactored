@@ -178,14 +178,14 @@ public class PickupArm {
          if (demoOnFlag){    
              //armDown();
              SmartDashboard.putNumber("DemoStatus: ", demoStatus);
-             System.out.println("In arm demo");
-             System.out.println(demoStatus);
+             //System.out.println("In arm demo");
+             //System.out.println(demoStatus);
              switch (demoStatus) {
                  
                   case 0:
                       targetRotatePosition = 2.7;
                       //rotate(team.targetRotatePosition);
-                      System.out.println("Moving");
+                      //System.out.println("Moving");
                       if (Math.abs(2.7-currentPosition) <= .05){
                           System.out.println("In case 0 if");
                           demoStatus = 1;

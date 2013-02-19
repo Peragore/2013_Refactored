@@ -92,7 +92,7 @@ public class Team3373 extends SimpleRobot{
    boolean goToFlag = true;
    
    public Team3373(){
-      camera.robotInit(LCD);
+      camera.robotInit();
     }
     
     public void autonomous() {
@@ -180,7 +180,7 @@ public class Team3373 extends SimpleRobot{
         //test = objShooter.shootLimit.get();
         //System.out.println(test);
        if(shooterController.isStartPushed()){
-          // LCD.println(Line.kUser5, 1, "Inside");//TODO
+           LCD.println(Line.kUser5, 1, "Inside");//TODO
            camera.imageAnalysis();
            System.out.println("Inside");
            //objShooter.start();
@@ -206,7 +206,7 @@ public class Team3373 extends SimpleRobot{
            objShooter.stop();
        }
        //if (shooterController.isStartPushed()){
-           objShooter.start();
+           //objShooter.start();
 
        }
        //objShooter.printLCD(LCD);

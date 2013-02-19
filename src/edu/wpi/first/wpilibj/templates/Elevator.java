@@ -91,7 +91,7 @@ public class Elevator {
         currentAngle = getAverageVoltage2(); 
         if (Math.abs(elevationTarget - currentAngle) <= .15){//TODO: check angle
             off();
-            System.out.println("off");
+           // System.out.println("off");
         } else if (elevationTarget > currentAngle && elevationTarget < maxLimit){
             raise();
             System.out.println("raise");

@@ -89,7 +89,8 @@ public class Team3373 extends SimpleRobot{
    int DP = 6;
    double rotateTest = 2.7;
    double autonomousSpeedTarget = 1;
-   boolean goToFlag = true;
+   boolean autoFlag = true;
+   double feedAngle = 2.9;
    
    public Team3373(){
       camera.robotInit();
@@ -97,11 +98,11 @@ public class Team3373 extends SimpleRobot{
     
     public void autonomous() {
         if (isAutonomous() && isEnabled()){
-                    if (leftRightSwitch.get()) //TODO: Finish
-                    while (goToFlag){
+                    //if (leftRightSwitch.get()) //TODO: Finish
+                    while (autoFlag){
                         elevator.goToAngle();
                         if (Math.abs(4-elevator.currentAngle) <= .1) {
-                            goToFlag = false;
+                            autoFlag = false;
                         }
                     }
                     objShooter.goToSpeed(autonomousSpeedTarget);
@@ -393,7 +394,10 @@ public class Team3373 extends SimpleRobot{
             * Feed Code *
             *************/
             if (driveStick.isStartPushed()){
-                elevator.goToAngle();
+                elevator.goTo(feedAngle);
+            }
+            if (driveStick.isBackPushed()){
+                objShooter.loadFrisbee(elevator);
             }
         }
     }

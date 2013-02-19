@@ -377,13 +377,24 @@ public class Team3373 extends SimpleRobot{
         /********************
          * Competition Code *
          ********************/
+            /********************
+             * Competition Mock
+            
             /****************
              * Shooter Code *
              ****************/
-             if (shooterController.isRBPushed()){
-                 
-             }
-        
+            /***************
+             * Driver Code *
+            ***************/
+            drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld());
+            drive.drive(newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(RX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LY), 0.1)));
+            
+           /*************
+            * Feed Code *
+            *************/
+            if (driveStick.isStartPushed()){
+                elevator.goToAngle();
+            }
         }
     }
 

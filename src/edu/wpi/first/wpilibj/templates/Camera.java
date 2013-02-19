@@ -128,7 +128,7 @@ public class Camera {
                         
                     } else*/ if (scoreCompare(scores[i], true)) {
 			System.out.println("particle: " + i + "is a Middle Goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
-                        middle_distance=computeDistance(thresholdImage, report, i, false);
+                        middle_distance = computeDistance(thresholdImage, report, i, false);
                         System.out.println("Mid Dist="+middle_distance);
                     } else {
                         //System.out.println("particle: " + i + "is not a goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
@@ -208,7 +208,7 @@ public class Camera {
             //double d = targetHeight/Math.tan(Math.toRadians(cangle));
             //System.out.println("D="+d);
             distw = distw/12.0; //converts measure into feet
-            distw = ((distw - 23.2954408984714)*.4) + distw; //converts measurement into roughly a true value. subtracts  "zero" value from raw distance, multiplying it by .4, and then adding raw distance to return a very close approximation of the distance, within one foot (enough accuracy for this)
+            distw = ((distw - 23.2954408984714)*.4) + distw; //converts measurement into roughly a true value. sub,tracts  "zero" value from raw distance, multiplying it by .4, and then adding raw distance to return a very close approximation of the distance, within one foot (enough accuracy for this)
             return distw; // returns adjusted distance
     }
     

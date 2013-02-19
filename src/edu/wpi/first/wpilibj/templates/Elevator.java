@@ -105,19 +105,20 @@ public class Elevator {
         elevationTarget = a;
         goToFlag = true;
     }
-    public void goTo(){
+    public void goTo(final double target){
         final Thread thread = new Thread(new Runnable() {
         public void run(){
                 goToFlag = false;
-                while(elevationTarget > currentAngle&& elevationTarget < maxLimit){
+                
+                while(target > currentAngle&& target < maxLimit){
                     System.out.println("raise");
-                    if(elevationTarget < currentAngle){
+                    if(target < currentAngle){
                         break;
                     }
                 }
-                while(elevationTarget < currentAngle&& elevationTarget > minLimit){
+                while(target < currentAngle&& target > minLimit){
                     System.out.println("lower");
-                    if(elevationTarget > currentAngle){
+                    if(target > currentAngle){
                         break;
                     }
                 }

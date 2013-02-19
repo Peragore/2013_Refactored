@@ -78,7 +78,7 @@ public class Camera {
         cc.addCriteria(MeasurementType.IMAQ_MT_AREA, 500, 65535, false);
     }
 
-    public void imageAnalysis() {
+    public double imageAnalysis() {
             Hashtable hash = new Hashtable();
             System.out.println("Inside image Analyis");
             try {
@@ -98,7 +98,7 @@ public class Camera {
                 //BinaryImage thresholdImage = image.thresholdHSL(40, 120, 140, 255, 10, 150);   // keep only red objects
                 //BinaryImage thresholdImage2 = image.thresholdRGB(40, 120, 140, 255, 0, 255);
                 //image.write("/vision/rawImage.bmp");
-                thresholdImage.write("/vision/threshold.bmp");
+                //thresholdImage.write("/vision/threshold.bmp");
                 //thresholdImage2.write("/vision/threshold2.bmp");
                 BinaryImage convexHullImage = thresholdImage.convexHull(false);          // fill in occluded rectangles
                 //convexHullImage.write("/vision/convexHull.bmp");
@@ -119,16 +119,16 @@ public class Camera {
                     scores[i].xEdge = scoreXEdge(thresholdImage, report);
                     scores[i].yEdge = scoreYEdge(thresholdImage, report);
 
-                    if(scoreCompare(scores[i], false))
+                    /*if(scoreCompare(scores[i], false))
                     {
                         System.out.println("particle: " + i + "is a High Goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
                         high_distance=computeDistance(thresholdImage, report, i, true);
                         //hash.("High Distance", (computeDistance(thresholdImage, report, i, true)));
 			System.out.println("Distance: " + high_distance);
                         
-                    } else if (scoreCompare(scores[i], true)) {
+                    } else*/ if (scoreCompare(scores[i], true)) {
 			System.out.println("particle: " + i + "is a Middle Goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
-                        middle_distance=computeDistance(thresholdImage, report, i, false)+4.5;
+                        middle_distance=computeDistance(thresholdImage, report, i, false);
                         System.out.println("Mid Dist="+middle_distance);
                     } else {
                         //System.out.println("particle: " + i + "is not a goal  centerX: " + report.center_mass_x_normalized + "centerY: " + report.center_mass_y_normalized);
@@ -151,10 +151,11 @@ public class Camera {
             } catch (NIVisionException ex) {
                 ex.printStackTrace();
             }
-            
+           return middle_distance; // returns raw middle distance
         }
 
-
+    
+    
     /**
      * This function is called once each time the robot enters operator control.
      */
@@ -206,8 +207,9 @@ public class Camera {
             //System.out.println("Cangle="+cangle);
             //double d = targetHeight/Math.tan(Math.toRadians(cangle));
             //System.out.println("D="+d);
-            
-            return distw/12.0;
+            distw = distw/12.0; //converts measure into feet
+            distw = ((distw - 23.2954408984714)*.4) + distw; //converts measurement into roughly a true value. subtracts  "zero" value from raw distance, multiplying it by .4, and then adding raw distance to return a very close approximation of the distance, within one foot (enough accuracy for this)
+            return distw; // returns adjusted distance
     }
     
     /**

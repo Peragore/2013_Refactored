@@ -60,6 +60,7 @@ public class Camera {
     double middle_distance = 0.0;
     double high_distance = 0.0;
     double distance;
+    boolean distanceFlag = false;
     AxisCamera camera; // = AxisCamera.getInstance();          // the axis camera object (connected to the switch)
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
     
@@ -342,10 +343,12 @@ public class Camera {
              
              public void run(){
                 double currentDistance = middle_distance;
-                
+                Camera camera = new Camera();
                 while(middle_distance == currentDistance){
                     imageAnalysis();
+                    camera.distanceFlag = false;
                     if(currentDistance!= middle_distance){
+                        camera.distanceFlag = true;
                         break;
                     }
                 }

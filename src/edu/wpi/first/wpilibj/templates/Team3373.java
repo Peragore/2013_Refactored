@@ -406,12 +406,18 @@ public class Team3373 extends SimpleRobot{
                  camera.findDist();
              }
              
-             if (shooterController.isAPushed()){ //says the shooter is aiming at high
+             if (shooterController.isYPushed()){ //says the shooter is aiming at high
                  targetSlot = lookUp.distanceHigh;
                  targetAngle = lookUp.angleHigh;
-             } else if (shooterController.isBPushed()){ //says the shooter is aiming at middle
+             } else if (shooterController.isXPushed()){ //says the shooter is aiming at middle
                  targetSlot = lookUp.distanceMiddle;
                  targetAngle = lookUp.angleMiddle;   
+             }
+             if (shooterController.isBackPushed() && camera.distanceFlag){ 
+                 elevator.goTo(lookUp.lookUpAngle(camera.middle_distance, targetSlot, targetAngle));
+             }
+             if (shooterController.isAPushed() && objShooter.busyStatus){
+                    objShooter.shooterThread();
              }
 
             /***************

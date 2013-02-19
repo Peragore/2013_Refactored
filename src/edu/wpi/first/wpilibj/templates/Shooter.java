@@ -29,13 +29,15 @@ public class Shooter {
         Talon stageOneTalon = new Talon(6); //Shooter Talons, spin the wheels
         Talon stageTwoTalon = new Talon(5); //Shooter Talons, spin the wheels
         DigitalInput shootLimit = new DigitalInput(6);
+        Elevator elevator = Elevator.getInstance();
        
         double percentageScaler = 0.75;
         double stageTwoVoltageOut =  0.0;
         double stageOneVoltageOut =  0.0;
        
         int elevatorStatus = 0;
-        boolean limit = shootLimit.get();     
+        boolean limit = shootLimit.get();   
+        boolean busyStatus = true;
     
 
     public void start(){
@@ -132,5 +134,40 @@ public class Shooter {
             } 
         });
             thread.start();
+    }
+    
+    public void shooterThread(){
+        final Thread thread = new Thread(new Runnable() {
+            public void run(){
+                busyStatus = false;
+                goToSpeed(1);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                shoot();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                loadFrisbee(elevator);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                
+                goToSpeed(.25);
+                busyStatus = true; //no longer busy (/.^.\)
+            }
+        });
+        thread.start();
     }
 }

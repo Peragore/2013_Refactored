@@ -46,6 +46,7 @@ public class Team3373 extends SimpleRobot{
    Drive drive = Drive.getInstance();
    Deadband deadband = new Deadband();
    NewMath newMath = new NewMath();
+   TableLookUp lookUp = new TableLookUp();
 
    boolean test;
    boolean solenidFlag=false;
@@ -91,6 +92,7 @@ public class Team3373 extends SimpleRobot{
    double autonomousSpeedTarget = 1;
    boolean autoFlag = true;
    double feedAngle = 2.9;
+   double autoTarget;
    
    public Team3373(){
       camera.robotInit();
@@ -98,10 +100,22 @@ public class Team3373 extends SimpleRobot{
     
     public void autonomous() {
         if (isAutonomous() && isEnabled()){
-                    //if (leftRightSwitch.get()) //TODO: Finish
+                    
+                if (leftRightSwitch.get() && frontBackSwitch.get()){ //further away, left side
+                        autoTarget = lookUp.lookUpAngle(19, lookUp.distanceMiddle, lookUp.angleMiddle);
+                    } else if (!leftRightSwitch.get() && frontBackSwitch.get()){ //further away, right side
+                        autoTarget = lookUp.lookUpAngle(19, lookUp.distanceMiddle, lookUp.angleMiddle);
+                    } else if (leftRightSwitch.get() && !frontBackSwitch.get()){
+                        autoTarget = lookUp.lookUpAngle(11, lookUp.distanceHigh, lookUp.angleHigh);
+                    } else if (!leftRightSwitch.get() && !frontBackSwitch.get()){
+                         autoTarget = lookUp.lookUpAngle(11, lookUp.distanceHigh, lookUp.angleHigh);
+                    }
+                
                     while (autoFlag){
-                        elevator.goToAngle();
-                        if (Math.abs(4-elevator.currentAngle) <= .1) {
+                        if (autoTarget > 0) {
+                        elevator.goTo(autoTarget);
+                        }
+                        if (Math.abs(autoTarget-elevator.currentAngle) <= .1) {
                             autoFlag = false;
                         }
                     }

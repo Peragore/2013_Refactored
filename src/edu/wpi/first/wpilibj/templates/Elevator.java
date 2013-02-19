@@ -5,6 +5,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Talon;
 
@@ -26,7 +27,8 @@ public class Elevator {
     //Talon elevatorTalon2 = new Talon(8);
     Talon elevatorTalon1 = new Talon(7);
     Talon elevatorTalon2 = new Talon(8);
-
+    DigitalInput shootLimit = new DigitalInput(4);
+    
     // Used by voltage averaging/ smoothing method
     int arraySize = 500;
     double runningTotalVoltage[] = new double[arraySize];

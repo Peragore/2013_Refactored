@@ -59,7 +59,7 @@ public class Camera {
     double WIDTH_VIEW_ANGLE = 80;
     double middle_distance = 0.0;
     double high_distance = 0.0;
-    
+    double distance;
     AxisCamera camera; // = AxisCamera.getInstance();          // the axis camera object (connected to the switch)
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
     
@@ -336,5 +336,22 @@ public class Camera {
         total = 100*total/(rowAverages.length);
         return total;
     }
-        
+     public void findDist(){
+         //double distance;
+         final Thread thread = new Thread(new Runnable() {
+             
+             public void run(){
+                double currentDistance = middle_distance;
+                
+                while(middle_distance == currentDistance){
+                    imageAnalysis();
+                    if(currentDistance!= middle_distance){
+                        break;
+                    }
+                }
+                }
+            });
+         
+                thread.start();
+     }          
 }

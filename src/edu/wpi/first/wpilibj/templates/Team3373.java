@@ -93,6 +93,8 @@ public class Team3373 extends SimpleRobot{
    boolean autoFlag = true;
    double feedAngle = 2.9;
    double autoTarget;
+   double[] targetSlot;
+   double[] targetAngle;
    
    public Team3373(){
       camera.robotInit();
@@ -398,6 +400,20 @@ public class Team3373 extends SimpleRobot{
             /****************
              * Shooter Code *
              ****************/
+             cameraControl.moveTest(shooterController.getRawAxis(LY));
+             
+             if (shooterController.isStartPushed()){
+                 camera.findDist();
+             }
+             
+             if (shooterController.isAPushed()){ //says the shooter is aiming at high
+                 targetSlot = lookUp.distanceHigh;
+                 targetAngle = lookUp.angleHigh;
+             } else if (shooterController.isBPushed()){ //says the shooter is aiming at middle
+                 targetSlot = lookUp.distanceMiddle;
+                 targetAngle = lookUp.angleMiddle;   
+             }
+
             /***************
              * Driver Code *
             ***************/

@@ -167,7 +167,9 @@ public class Team3373 extends SimpleRobot{
             arm.demoStatus = 0;
             elevator.elevationTarget = elevator.angleMeter.getVoltage();
             cameraControl.servoTarget = .5;
-
+            objShooter.busyStatus = true;
+            camera.distanceFlag = false;
+            controlFlag = true;
         }
     }
     public void operatorControl() {
@@ -182,34 +184,34 @@ public class Team3373 extends SimpleRobot{
    //Resets the internal toggle flags when a previously pushed button has been released
        driveStick.clearButtons();
        shooterController.clearButtons();
-       
+       /*
        if(driveStick.isStartPushed()){
            objShooter.shoot();
           //LCD.println(Line.kUser5, 1, "Inside");
        }
        if(driveStick.isBackPushed()){
            objShooter.loadFrisbee(elevator);
-       }
-       
+       }*/
+       /*
        //LCD.println(Line.kUser5, 1, "AngleVoltage: " + elevator.angleMeter.getVoltage());
        cameraControl.moveTest(shooterController.getRawAxis(LY));
        LCD.println(Line.kUser5, 1, "Servo Angle: " + cameraControl.cameraServo.get());
-       
+       */
        //LCD.println(Line.kUser2, 1, "running");
        
         //test = objShooter.shootLimit.get();
         //System.out.println(test);
-       if(shooterController.isStartPushed()){
+       /*if(shooterController.isStartPushed()){
            LCD.println(Line.kUser5, 1, "Inside");//TODO
            camera.imageAnalysis();
            System.out.println("Inside");
            //objShooter.start();
            //arm.armUp();
-       }
+       }*/
        /**********************
         * Shooter Algorithms *
         **********************/
-;
+/*
        if(shooterController.isAPushed()){
             objShooter.increaseSpeed();
        }
@@ -221,7 +223,7 @@ public class Team3373 extends SimpleRobot{
        }
        if(shooterController.isYPushed()){
            objShooter.decreasePercentage();
-       }
+       }*/
        if(shooterController.isBackPushed()){
            objShooter.stop();
        }
@@ -250,17 +252,17 @@ public class Team3373 extends SimpleRobot{
        
        LCD.println(Line.kUser5, 1, "Motor Modifier: " + elevator.pwmModifier);*/
        //elevator.automaticElevatorTarget(shooterController.isLBPushed(), shooterController.isRBPushed());
-       LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevationTarget);
+       //LCD.println(Line.kUser1, 1, "ElevatorTarget: " + elevator.elevationTarget);
        //LCD.println(Line.kUser2, 1, "Elv(Volt): " + elevator.angleMeter.getAverageVoltage());
-       elevator.angleMeter.setAverageBits(128);
+       //elevator.angleMeter.setAverageBits(128);
        //SmartDashboard.putNumber("Average Bits: ", elevator.angleMeter.getAverageBits());
        //SmartDashboard.putNumber("Oversampling Bits: ", elevator.angleMeter.getOversampleBits());
-       SmartDashboard.putNumber("Elevation (Our Average): ", elevator.getAverageVoltage2());
-       SmartDashboard.putNumber("Elevation (No Average): ", elevator.angleMeter.getVoltage());
+      // SmartDashboard.putNumber("Elevation (Our Average): ", elevator.getAverageVoltage2());
+       //SmartDashboard.putNumber("Elevation (No Average): ", elevator.angleMeter.getVoltage());
        //SmartDashboard.putNumber("Elevation (Their Average): ", elevator.angleMeter.getAverageVoltage());
-       LCD.println(Line.kUser3, 1, "Current Angle:" + elevator.currentAngle);
-       SmartDashboard.putNumber("Elevator Angle: ", elevator.elevatorAngleMath());
-       SmartDashboard.putNumber("Servo Angle: ", cameraControl.servoAngleMath());
+       //LCD.println(Line.kUser3, 1, "Current Angle:" + elevator.currentAngle);
+       //SmartDashboard.putNumber("Elevator Angle: ", elevator.elevatorAngleMath());
+       //SmartDashboard.putNumber("Servo Angle: ", cameraControl.servoAngleMath());
        //LCD.println(Line.kUser3, 1, "shootLimit: " + objShooter.shootLimit.get());
        //LCD.println(Line.kUser4, 1, "Switch1: " + frontBackSwitch.get());
        //LCD.println(Line.kUser5, 1, "Switch2: " + leftRightSwitch.get());
@@ -276,7 +278,7 @@ public class Team3373 extends SimpleRobot{
        } else {
            elevator.off();
        }*/
-       
+       /*
        if(driveStick.isAPushed()){
            elevator.setTarget(2.5);
        }
@@ -288,9 +290,9 @@ public class Team3373 extends SimpleRobot{
        }      
        if(driveStick.isYPushed()){
            elevator.setTarget(2.95);
-       }
+       }*/
        //elevator.goTo();
-       elevator.goToAngle();
+       //elevator.goToAngle();
        /*if (shooterController.isRBPushed(){
         *   elevator.elevatorTarget = 2.9;
         * } else if (shooterController.isLBPushed()){
@@ -302,8 +304,8 @@ public class Team3373 extends SimpleRobot{
         /**************
          * Drive Code *
          **************/
-         drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld());
-         drive.drive(newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(RX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LY), 0.1)));
+         //drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld());
+         //drive.drive(newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(RX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LY), 0.1)));
         /******************
          * Demo/Test Code *
          ******************/
@@ -315,7 +317,7 @@ public class Team3373 extends SimpleRobot{
        /* if (shooterController.isStartPushed()){
            arm.rotate(2.7);
        }
-       */
+       *//*
        if (!armTestFlag){
         if (shooterController.isStartPushed()){
             arm.demoStatus = 0;
@@ -324,8 +326,7 @@ public class Team3373 extends SimpleRobot{
         }
        }
        SmartDashboard.putBoolean("ArmUp Bool:", arm.upDownFlag);
-       SmartDashboard.putNumber("CurrentPosition :", arm.currentPosition);
-       //arm.rotate(rotateTest);
+       SmartDashboard.putNumber("CurrentPosition :", arm.currentPosition);*/
        
 
        //if  (!armTestFlag) {
@@ -403,7 +404,10 @@ public class Team3373 extends SimpleRobot{
             /****************
              * Shooter Code *
              ****************/
+            if(!armTestFlag){
+            if (controlFlag){
              cameraControl.moveTest(shooterController.getRawAxis(LY));
+            
              
              if (shooterController.isStartPushed()){
                  camera.findDist();
@@ -420,7 +424,8 @@ public class Team3373 extends SimpleRobot{
                  elevator.goTo(lookUp.lookUpAngle(camera.middle_distance, targetSlot, targetAngle));
              }
              if (shooterController.isAPushed() && objShooter.busyStatus){
-                    objShooter.shooterThread();
+                 System.out.println("Shooting");   
+                 objShooter.shooterThread();
              }
 
             /***************
@@ -449,9 +454,12 @@ public class Team3373 extends SimpleRobot{
             if(driveStick.isXPushed()){
                 elevator.goTo(climbingPosition);
             }
+            }
+            
             if(driveStick.isYPushed()){
                 elevator.lower();
                 controlFlag = false;
+            }
             }
         }
     }

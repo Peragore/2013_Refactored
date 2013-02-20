@@ -61,6 +61,8 @@ public class Camera {
     double high_distance = 0.0;
     double distance;
     boolean distanceFlag = false;
+    boolean distFlag;
+    boolean canRun = true;
     AxisCamera camera; // = AxisCamera.getInstance();          // the axis camera object (connected to the switch)
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
     
@@ -209,6 +211,7 @@ public class Camera {
             //double d = targetHeight/Math.tan(Math.toRadians(cangle));
             //System.out.println("D="+d);
             distw = distw/12.0; //converts measure into feet
+            distw += 4.5;
             distw = ((distw - 23.2954408984714)*.4) + distw; //converts measurement into roughly a true value. sub,tracts  "zero" value from raw distance, multiplying it by .4, and then adding raw distance to return a very close approximation of the distance, within one foot (enough accuracy for this)
             return distw; // returns adjusted distance
     }
@@ -344,7 +347,7 @@ public class Camera {
              public void run(){
                 double currentDistance = middle_distance;
                 Camera camera = new Camera();
-                while(middle_distance == currentDistance){
+                while(middle_distance == currentDistance && distFlag && canRun){
                     imageAnalysis();
                     camera.distanceFlag = false;
                     if(currentDistance!= middle_distance){

@@ -38,6 +38,7 @@ public class Shooter {
         int elevatorStatus = 0;
         boolean limit = shootLimit.get();   
         boolean busyStatus = true;
+        boolean canRun = true;
     
 
     public void start(){
@@ -105,11 +106,11 @@ public class Shooter {
         public void run(){
             limit = shootLimit.get();
             System.out.println(limit);
-            while(limit){
+            while(limit && canRun){
                 shootSpike.set(Relay.Value.kForward);
                 limit = shootLimit.get();
             }
-            while(!limit){
+            while(!limit && canRun){
                 shootSpike.set(Relay.Value.kForward);
                 limit = shootLimit.get();
             }
@@ -140,11 +141,31 @@ public class Shooter {
         final Thread thread = new Thread(new Runnable() {
             public void run(){
                 busyStatus = false;
-                goToSpeed(1);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                if (stageTwoTalon.get() < 1){
+                    goToSpeed(.25);
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    goToSpeed(.5);
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }                
+                    goToSpeed(.75);
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }                
+                    goToSpeed(1);
+                    try {
+                        Thread.sleep(700);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
                 }
                 shoot();
                 try {
@@ -153,21 +174,21 @@ public class Shooter {
                     ex.printStackTrace();
                 }
                 loadFrisbee(elevator);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
                 
-                goToSpeed(.25);
+                //goToSpeed(.25);
                 busyStatus = true; //no longer busy (/.^.\)
             }
         });
         thread.start();
+    }
+    public void shooterAccel(double target){
+        double i = 0;
+        if (target > stageTwoTalon.get()){
+             i++;
+        } else if (target < stageTwoTalon.get()){
+            i--;
+        }
+        stageTwoTalon.set(i);
+        stageOneTalon.set(i * percentageScaler);
     }
 }

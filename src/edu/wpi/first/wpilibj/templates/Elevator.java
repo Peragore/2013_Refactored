@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  *
@@ -27,7 +28,7 @@ public class Elevator {
     //Talon elevatorTalon2 = new Talon(8);
     Talon elevatorTalon1 = new Talon(7);
     Talon elevatorTalon2 = new Talon(8);
-    DigitalInput shootLimit = new DigitalInput(4);
+    DigitalInput lowerLimit = new DigitalInput(4);
     
     // Used by voltage averaging/ smoothing method
     int arraySize = 500;
@@ -47,11 +48,13 @@ public class Elevator {
     double basePWM = .4;
     double pwmModifier = 0.85;
     double elevatorTarget;
+    boolean canRun = true;
     double currentAngle = angleMeter.getVoltage();
     double elevationTarget = angleMeter.getVoltage();;
     boolean goToFlag = false;
     double slope;
     double angleCalc;
+    boolean elevateFlag = true;
     //double angle = 41(voltage - 2.5) + 21.9;
     public void raise(){
         elevatorTalon1.set(basePWM);
@@ -59,9 +62,11 @@ public class Elevator {
     }
     
     public void lower(){
-        elevatorTalon1.set(-basePWM);
-        elevatorTalon2.set(-basePWM * pwmModifier);
-    }
+        if (!lowerLimit.get()){
+            elevatorTalon1.set(-basePWM);
+            elevatorTalon2.set(-basePWM * pwmModifier);
+        }
+        }
     public void off(){
         elevatorTalon1.set(0);
         elevatorTalon2.set(0);
@@ -91,7 +96,7 @@ public class Elevator {
         //at the moment elevatorTarget is a voltage, 
         //TODO: make some sort of conversion from voltage to angle
         currentAngle = getAverageVoltage2(); 
-        if (Math.abs(elevationTarget - currentAngle) <= .15){//TODO: check angle
+        if (Math.abs(elevationTarget - currentAngle) <= .1){//TODO: check angle
             off();
            // System.out.println("off");
         } else if (elevationTarget > currentAngle && elevationTarget < maxLimit){
@@ -111,20 +116,27 @@ public class Elevator {
         final Thread thread = new Thread(new Runnable() {
         public void run(){
                 goToFlag = false;
-                
-                while(target > currentAngle&& target < maxLimit){
-                    System.out.println("raise");
+                currentAngle = getAverageVoltage2();
+                while(target > currentAngle && currentAngle < maxLimit && target < maxLimit && canRun && elevateFlag){
+                    currentAngle = getAverageVoltage2();
+                    System.out.println("raise " + target);
+                    raise();
                     if(target < currentAngle){
+                        elevateFlag = false;
                         break;
                     }
                 }
-                while(target < currentAngle&& target > minLimit){
-                    System.out.println("lower");
+                while(target < currentAngle&& target > minLimit && currentAngle > minLimit && canRun && elevateFlag){
+                    currentAngle = getAverageVoltage2();
+                    System.out.println("lower " + target);
+                    lower();
                     if(target > currentAngle){
+                        elevateFlag = false;
                         break;
                     }
                 }
                 System.out.println("off");
+                off();
                 }
             });
                 thread.start();

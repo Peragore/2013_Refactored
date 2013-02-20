@@ -34,7 +34,7 @@ public class CameraControl {
     }
     public void moveTest(double joystick){
         if (joystick > .2 || joystick <-.2){    
-        servoTarget += (joystick)/100;
+        servoTarget += (joystick)/500;
         }
         if (servoTarget > 1) {servoTarget = 1;}
         if (servoTarget < 0) {servoTarget = 0;}

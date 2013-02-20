@@ -92,11 +92,12 @@ public class Team3373 extends SimpleRobot{
    double autonomousSpeedTarget = 1;
    boolean autoFlag = true;
    double feedAngle = 2.8;
+   double climbAngle = 2.9;
    double autoTarget;
    double[] targetSlot;
    double[] targetAngle;
    
-   double climbingPosition = 3.05;
+   //double climbingPosition = 2.75;
    boolean controlFlag = true;
            
    public Team3373(){
@@ -105,7 +106,9 @@ public class Team3373 extends SimpleRobot{
 
     public void autonomous() {
         if (isAutonomous() && isEnabled()){
-                    
+            elevator.canRun = true;
+            camera.canRun = true;
+            objShooter.canRun = true;                
                 if (leftRightSwitch.get() && frontBackSwitch.get()){ //further away, right side, value returned is also feed/climb position
                         autoTarget = lookUp.lookUpAngle(18, lookUp.distanceMiddle, lookUp.angleMiddle);
                         System.out.println("Target1="+autoTarget);
@@ -123,37 +126,31 @@ public class Team3373 extends SimpleRobot{
                     while (autoFlag){
                         
                         if (autoTarget > 0) {
-                        elevator.elevationTarget = autoTarget;
-                            elevator.goToAngle();
+                            elevator.goTo(autoTarget);
                         }
-                        if (Math.abs(autoTarget-elevator.currentAngle) <= .1) {
+                        if (!elevator.elevateFlag) {
                             autoFlag = false;
                         }
                     }
-                    objShooter.goToSpeed(autonomousSpeedTarget*.25);
+                    objShooter.goToSpeed(autonomousSpeedTarget*.33);
                   try {
-                        Thread.sleep(500L);
+                        Thread.sleep(300L);
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
-                    objShooter.goToSpeed(autonomousSpeedTarget * .5);
+                    objShooter.goToSpeed(autonomousSpeedTarget * .66);
                     try {
-                        Thread.sleep(500L);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    objShooter.goToSpeed(autonomousSpeedTarget * .75);
-                    try {
-                        Thread.sleep(500L);
+                        Thread.sleep(300L);
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
                     objShooter.goToSpeed(autonomousSpeedTarget);
                     try {
-                        Thread.sleep(500L);
+                        Thread.sleep(1500L);
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
-                    }                    
+                    }
+                     
                     for (int i = 0; i <= 2; i++){
                         objShooter.shoot();
                         try {
@@ -164,7 +161,7 @@ public class Team3373 extends SimpleRobot{
                         
                         objShooter.loadFrisbee(elevator);
                          try {
-                            Thread.sleep(1000);
+                            Thread.sleep(1500);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
@@ -416,6 +413,13 @@ public class Team3373 extends SimpleRobot{
                  System.out.println("Shooting");   
                  objShooter.shooterThread();
              }
+             if (shooterController.isRBHeld()){
+                 elevator.raise();
+             } else if (shooterController.isLBHeld()){
+                 elevator.lower();
+             } else {
+                 elevator.off();
+             }
 
             /***************
              * Driver Code *
@@ -441,23 +445,30 @@ public class Team3373 extends SimpleRobot{
             }
             
             if(driveStick.isXPushed()){
-                elevator.goTo(climbingPosition);
+                elevator.goTo(climbAngle);
             }
             
             
             if(driveStick.isYPushed()){
-                elevator.lower();
                 controlFlag = false;
+            }
+            if (!controlFlag){
+                elevator.lower();
+                if (elevator.lowerLimit.get()){
+                    elevator.off();
+                }
+            }
             /************
              * TODO: 
              * Have autonomous spin up gradually, but still work within time
              * Add thread safety
              * Add a fourth shoot in autonomous (Maybe)
+             * Goto starting height: 2.668
              ************/
             
         
     }
 }
     }
-}
+
 

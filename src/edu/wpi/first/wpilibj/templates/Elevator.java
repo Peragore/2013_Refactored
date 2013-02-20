@@ -65,7 +65,7 @@ public class Elevator {
         if (!lowerLimit.get()){
             elevatorTalon1.set(-basePWM);
             elevatorTalon2.set(-basePWM * pwmModifier);
-        }
+            }
         }
     public void off(){
         elevatorTalon1.set(0);

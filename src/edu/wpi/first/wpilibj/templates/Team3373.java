@@ -255,10 +255,10 @@ public class Team3373 extends SimpleRobot{
        }
        if(shooterController.isYPushed()){
            objShooter.decreasePercentage();
-       }*/
+       }
        if(shooterController.isBackPushed()){
            objShooter.stop();
-       }
+       }*/
        //if (shooterController.isStartPushed()){
            //objShooter.start();
 
@@ -382,7 +382,7 @@ public class Team3373 extends SimpleRobot{
              ****************/
         if (controlFlag){    
             
-             cameraControl.moveTest(shooterController.getRawAxis(LY));
+             cameraControl.moveTest(-shooterController.getRawAxis(LY));
             
              SmartDashboard.putBoolean("leftRightSwitch: ", leftRightSwitch.get());
              SmartDashboard.putBoolean("frontBackSwitch: ", frontBackSwitch.get());
@@ -420,7 +420,9 @@ public class Team3373 extends SimpleRobot{
              } else {
                  elevator.off();
              }
-
+             if (shooterController.isBPushed()){
+                 objShooter.goToSpeed(.25);
+             }
             /***************
              * Driver Code *
             ***************/

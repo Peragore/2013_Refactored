@@ -162,7 +162,7 @@ public class Shooter {
                     }                
                     goToSpeed(1);
                     try {
-                        Thread.sleep(700);
+                        Thread.sleep(1500);
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }

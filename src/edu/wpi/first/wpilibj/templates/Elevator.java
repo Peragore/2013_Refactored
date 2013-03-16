@@ -31,11 +31,12 @@ public class Elevator {
     DigitalInput lowerLimit = new DigitalInput(4);
     
     // Used by voltage averaging/ smoothing method
-    int arraySize = 500;
+    int arraySize = 50;
     double runningTotalVoltage[] = new double[arraySize];
     int bufferCount = 0;
     int currentIndex=0;
     double currentTotalVoltage = 0.0;
+    double currentAverageVoltage = 0.0;
     double currentVoltage;
     double lastReading = 0.0;
 
@@ -78,10 +79,17 @@ public class Elevator {
    } 
 
        public double getAverageVoltage2() {
+       /*
+        for (int i = 0; i < arraySize; i++){
+            currentTotalVoltage += runningTotalVoltage[i];
+        }
+        currentAverageVoltage = currentTotalVoltage/arraySize;
         
- 
-           currentVoltage = angleMeter.getVoltage(); //gets the non-average voltage of the sensor
-
+        
+       return currentAverageVoltage;
+       */
+       //old code to get voltage KEEP THIS CODE, WAS POSSIBLY WORKING
+         currentVoltage = angleMeter.getVoltage(); //gets the non-average voltage of the sensor
        currentTotalVoltage = currentTotalVoltage - runningTotalVoltage[currentIndex] + currentVoltage; //adds the new data point while deleting the old
        runningTotalVoltage[currentIndex] = currentVoltage;//store the new data point
        currentIndex = (currentIndex + 1) %  arraySize;//currentIndex is the index to be changed
@@ -89,9 +97,23 @@ public class Elevator {
            bufferCount++;//checks to see jf the array is full of data points
        }
        return currentTotalVoltage/bufferCount;
-        
+        //*/
     }
-    
+    public void createDataSet(){//need to evaluate buffer(arraysize)
+       final Thread thread = new Thread(new Runnable() {
+        public void run(){
+       while(true){//we want this running always, it is ok running while robot is disabled.
+       currentVoltage = angleMeter.getVoltage(); //gets the non-average voltage of the sensor
+       runningTotalVoltage[currentIndex] = currentVoltage;//store the new data point
+       currentIndex = (currentIndex + 1) %  arraySize;//currentIndex is the index to be changed
+       if (bufferCount < arraySize) {
+           bufferCount++;//checks to see if the array is full of data points
+       }
+        }
+        }
+        });
+        thread.start();
+    }
     public void goToAngle(){
         //at the moment elevatorTarget is a voltage, 
         //TODO: make some sort of conversion from voltage to angle
@@ -101,10 +123,9 @@ public class Elevator {
            // System.out.println("off");
         } else if (elevationTarget > currentAngle && elevationTarget < maxLimit){
             raise();
-            System.out.println("raise");
+            //System.out.println("raise");
         } else if (elevationTarget < currentAngle && elevationTarget > minLimit){
-            lower();
-            System.out.println("lower");
+            //System.out.println("lower");
         } 
         
     }
@@ -117,7 +138,7 @@ public class Elevator {
         public void run(){
                 goToFlag = false;
                 currentAngle = getAverageVoltage2();
-                while(target > currentAngle && currentAngle < maxLimit && target < maxLimit && canRun && elevateFlag){
+                while(target > currentAngle  && target < maxLimit && currentAngle < maxLimit && canRun && elevateFlag){
                     currentAngle = getAverageVoltage2();
                     System.out.println("raise " + target);
                     raise();
@@ -126,7 +147,7 @@ public class Elevator {
                         break;
                     }
                 }
-                while(target < currentAngle&& target > minLimit && currentAngle > minLimit && canRun && elevateFlag){
+                while(target < currentAngle && target > minLimit && currentAngle > minLimit && canRun && elevateFlag){
                     currentAngle = getAverageVoltage2();
                     System.out.println("lower " + target);
                     lower();
@@ -135,7 +156,7 @@ public class Elevator {
                         break;
                     }
                 }
-                System.out.println("off");
+                //System.out.println("off");
                 off();
                 }
             });

@@ -96,7 +96,7 @@ public class Camera {
                 } catch (AxisCameraException ace) {
                 }
                 if  (image==null) System.out.println("null");
-                BinaryImage thresholdImage = image.thresholdHSV(60, 100, 90, 255, 20, 255);   // keep only red objects
+                BinaryImage thresholdImage = image.thresholdHSV(95, 161, 215, 255, 215, 255);   // keep only red objects
                 //image = image.replaceBluePlane(image.getRedPlane());
                 //BinaryImage thresholdImage = image.thresholdHSL(40, 120, 140, 255, 10, 150);   // keep only red objects
                 //BinaryImage thresholdImage2 = image.thresholdRGB(40, 120, 140, 255, 0, 255);

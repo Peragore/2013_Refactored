@@ -79,7 +79,7 @@ public class Elevator {
    } 
 
        public double getAverageVoltage2() {
-       /*
+       
         for (int i = 0; i < arraySize; i++){
             currentTotalVoltage += runningTotalVoltage[i];
         }
@@ -87,9 +87,9 @@ public class Elevator {
         
         
        return currentAverageVoltage;
-       */
+       
        //old code to get voltage KEEP THIS CODE, WAS POSSIBLY WORKING
-         currentVoltage = angleMeter.getVoltage(); //gets the non-average voltage of the sensor
+       /*  currentVoltage = angleMeter.getVoltage(); //gets the non-average voltage of the sensor
        currentTotalVoltage = currentTotalVoltage - runningTotalVoltage[currentIndex] + currentVoltage; //adds the new data point while deleting the old
        runningTotalVoltage[currentIndex] = currentVoltage;//store the new data point
        currentIndex = (currentIndex + 1) %  arraySize;//currentIndex is the index to be changed
@@ -97,7 +97,7 @@ public class Elevator {
            bufferCount++;//checks to see jf the array is full of data points
        }
        return currentTotalVoltage/bufferCount;
-        //*/
+        */
     }
     public void createDataSet(){//need to evaluate buffer(arraysize)
        final Thread thread = new Thread(new Runnable() {

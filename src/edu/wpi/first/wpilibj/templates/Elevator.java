@@ -31,7 +31,7 @@ public class Elevator {
     DigitalInput lowerLimit = new DigitalInput(4);
     
     // Used by voltage averaging/ smoothing method
-    int arraySize = 50;
+    int arraySize = 1000;
     double runningTotalVoltage[] = new double[arraySize];
     int bufferCount = 0;
     int currentIndex=0;
@@ -39,6 +39,7 @@ public class Elevator {
     double currentAverageVoltage = 0.0;
     double currentVoltage;
     double lastReading = 0.0;
+    double whileCount = 0;
 
     AnalogChannel angleMeter = new AnalogChannel(1);
     
@@ -56,6 +57,7 @@ public class Elevator {
     double slope;
     double angleCalc;
     boolean elevateFlag = true;
+    double shootTarget;
     //double angle = 41(voltage - 2.5) + 21.9;
     public void raise(){
         elevatorTalon1.set(basePWM);
@@ -84,7 +86,7 @@ public class Elevator {
             currentTotalVoltage += runningTotalVoltage[i];
         }
         currentAverageVoltage = currentTotalVoltage/arraySize;
-        
+       currentTotalVoltage = 0.0; 
         
        return currentAverageVoltage;
        
@@ -103,6 +105,7 @@ public class Elevator {
        final Thread thread = new Thread(new Runnable() {
         public void run(){
        while(true){//we want this running always, it is ok running while robot is disabled.
+        whileCount++;
        currentVoltage = angleMeter.getVoltage(); //gets the non-average voltage of the sensor
        runningTotalVoltage[currentIndex] = currentVoltage;//store the new data point
        currentIndex = (currentIndex + 1) %  arraySize;//currentIndex is the index to be changed
@@ -138,6 +141,7 @@ public class Elevator {
         public void run(){
                 goToFlag = false;
                 currentAngle = getAverageVoltage2();
+                shootTarget = target;
                 while(target > currentAngle  && target < maxLimit && currentAngle < maxLimit && canRun && elevateFlag){
                     currentAngle = getAverageVoltage2();
                     System.out.println("raise " + target);

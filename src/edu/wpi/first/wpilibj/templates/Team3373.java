@@ -187,7 +187,11 @@ public class Team3373 extends SimpleRobot{
      * This function is called once each time the robot enters operator control.
      */
     public void disabled(){
+        if (isDisabled()){
+            elevator.createDataSet();
+        }
         while (isDisabled()){
+            camera.distanceTimeOut = 0;
             manualToggle = false;
             armTestFlag = false;
             arm.demoOnFlag = false;
@@ -232,6 +236,8 @@ public class Team3373 extends SimpleRobot{
    //Resets the internal toggle flags when a previously pushed button has been released
        driveStick.clearButtons();
        shooterController.clearButtons();
+       SmartDashboard.putNumber("Target Voltage: ", elevator.shootTarget);
+       SmartDashboard.putNumber("Loop Count", elevator.whileCount);
        /*
        if(driveStick.isStartPushed()){
            objShooter.shoot();
@@ -416,7 +422,7 @@ public class Team3373 extends SimpleRobot{
                  targetAngle = lookUp.angleMiddle;
                  SmartDashboard.putString("Looking at: ", "middle distance");
              }
-            
+            SmartDashboard.putNumber("Voltage", elevator.angleMeter.getVoltage());
              if (shooterController.isBackPushed()){ 
                  //System.out.println("Going to target");
                  SmartDashboard.putNumber("Target Voltage: ", lookUp.lookUpAngle(camera.middle_distance, targetSlot, targetAngle));
@@ -424,7 +430,7 @@ public class Team3373 extends SimpleRobot{
                  elevator.goTo(lookUp.lookUpAngle(camera.middle_distance, targetSlot, targetAngle));
                  
              }
-             SmartDashboard.putNumber("Current Voltage: ", elevator.angleMeter.getVoltage());
+             SmartDashboard.putNumber("Current Voltage: ", elevator.currentAngle);
              SmartDashboard.putBoolean("Shooting: ", objShooter.busyStatus); 
              if (shooterController.isAPushed() && objShooter.busyStatus){  
                  objShooter.shooterThread();

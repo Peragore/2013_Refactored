@@ -7,7 +7,7 @@ import java.util.Hashtable;
 
 /**
  *
- * @author RoboHawks
+ * @author Jamie Dyer
  */
 public class TableLookUp {
     double[] distanceMiddle = {10,15,20,25,30,35};// this is for the middle target

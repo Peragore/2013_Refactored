@@ -48,7 +48,6 @@ public class Team3373 extends SimpleRobot{
    Deadband deadband = new Deadband();
    NewMath newMath = new NewMath();
    TableLookUp lookUp = new TableLookUp();
-
    boolean test;
    boolean solenidFlag=false;
    
@@ -426,6 +425,8 @@ public class Team3373 extends SimpleRobot{
              if (shooterController.isBackPushed()){ 
                  //System.out.println("Going to target");
                  SmartDashboard.putNumber("Target Voltage: ", lookUp.lookUpAngle(camera.middle_distance, targetSlot, targetAngle));
+                 controlFlag = true;
+                 elevator.canRun = true;
                  elevator.elevateFlag = true;
                  elevator.goTo(lookUp.lookUpAngle(camera.middle_distance, targetSlot, targetAngle));
                  
@@ -462,7 +463,7 @@ public class Team3373 extends SimpleRobot{
            /*************
             * Feed Code *
             *************/
-            if (driveStick.isStartPushed()){
+            if (driveStick.isStartPushed()){//why is this here b already does this
                 controlFlag = true;
                 elevator.canRun = true;
                 elevator.elevateFlag = true;
@@ -516,21 +517,25 @@ public class Team3373 extends SimpleRobot{
              * Add a fourth shoot in autonomous (Maybe)
              * Goto starting height: 2.668
              ************/
-            
+            double stringPotVoltage;
+            stringPotVoltage = elevator.stringPot.getVoltage();
+            System.out.println(stringPotVoltage);
         
     }
   
 }
     public void test() {
+        
         while (isEnabled() && isTest()) {
             if (shooterController.isRBHeld()){
                 elevator.raise();
             } else if (shooterController.isLBHeld()){
                elevator.lower(); 
             } else elevator.off();
-           drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld());
+            drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld());
             drive.drive(newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(RX), 0.1)), newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LY), 0.1)));  
-}   
+        
+        }   
     }
 }
 

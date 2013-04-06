@@ -42,16 +42,17 @@ public class Elevator {
     double whileCount = 0;
 
     AnalogChannel angleMeter = new AnalogChannel(1);
+    AnalogChannel stringPot = new AnalogChannel(3);
     
-    double minLimit = 2.5;
-    double maxLimit = 3.2;
+    double minLimit = 2.5;//this must be changed to stringPot min
+    double maxLimit = 3.2; //this must be changed to stingPot Max
     double minDegrees = 21.9;
     double maxDegrees = 50.6;
-    double basePWM = .4;
+    double basePWM = .4; //based on calculations, this speed should be at 0.73 to maintain same speed for height, 
     double pwmModifier = 0.85;
     double elevatorTarget;
     boolean canRun = true;
-    double currentAngle = angleMeter.getVoltage();
+    double currentAngle = stringPot.getVoltage(); //changed to string pot so that goTo works
     double elevationTarget = angleMeter.getVoltage();;
     boolean goToFlag = false;
     double slope;
@@ -136,14 +137,14 @@ public class Elevator {
         elevationTarget = a;
         goToFlag = true;
     }
-    public void goTo(final double target){
+    public void goTo(final double target){ //NOW uses StringPot.getVoltage to read voltage to move elevator, changes marked below
         final Thread thread = new Thread(new Runnable() {
         public void run(){
                 goToFlag = false;
-                currentAngle = getAverageVoltage2();
+                currentAngle = stringPot.getVoltage(); //change happened here
                 shootTarget = target;
                 while(target > currentAngle  && target < maxLimit && currentAngle < maxLimit && canRun && elevateFlag){
-                    currentAngle = getAverageVoltage2();
+                    currentAngle = stringPot.getVoltage();//change happened here
                     System.out.println("raise " + target);
                     raise();
                     if(target < currentAngle){
@@ -152,7 +153,7 @@ public class Elevator {
                     }
                 }
                 while(target < currentAngle && target > minLimit && currentAngle > minLimit && canRun && elevateFlag){
-                    currentAngle = getAverageVoltage2();
+                    currentAngle = stringPot.getVoltage();//change happened here
                     System.out.println("lower " + target);
                     lower();
                     if(target > currentAngle){
